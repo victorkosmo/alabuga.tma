@@ -1,0 +1,9 @@
+Attempt to fix initialization error when running in a browser.
+
+Analysis:
+The application shows an "Initialization Error" because it's running in production mode (`import.meta.env.DEV` is false) outside of the Telegram environment. In this mode, it tries to load the Telegram SDK, which fails, leading to an initialization error.
+
+The environment variables in the screenshot show `VITE_ENV: "development"`, which indicates the developer's intent to run in development mode. However, the code checks `import.meta.env.DEV` to enable development-specific logic (like mocking Telegram data).
+
+Proposed Fix:
+Modified the development mode check in `src/stores/telegram.js` and `src/App.vue` to use `import.meta.env.VITE_ENV === 'development'` instead of `import.meta.env.DEV`. This will correctly enable the development mode mock, preventing the app from trying to load the Telegram SDK when run in a browser for development.
