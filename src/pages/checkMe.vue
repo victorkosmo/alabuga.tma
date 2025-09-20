@@ -2,6 +2,12 @@
     <div class="max-w-4xl mx-auto p-8 border border-gray-200 rounded-xl bg-gray-50 mt-8">
       <h1 class="text-3xl font-bold text-center mb-8">Check User Status</h1>
   
+      <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <h2 class="text-lg font-semibold text-blue-800 mb-2">Current Auth Token</h2>
+        <p class="text-sm text-gray-600 mb-2">This is the token being sent to the backend. If it looks incorrect (e.g., "[object Object]"), the backend login response format may differ from what the frontend expects.</p>
+        <pre class="bg-white p-3 rounded border border-dashed border-gray-300 text-sm break-all whitespace-pre-wrap">{{ telegramStore.accessToken || 'No token found' }}</pre>
+      </div>
+
       <div class="mt-8">
         <div v-if="loading" class="bg-gray-200 p-6 rounded-lg text-gray-700 text-center">
           Loading user data...
@@ -37,6 +43,9 @@
   import { ref } from 'vue';
   import apiClient from '../services/apiService'; // Your configured Axios instance
   import { Button } from '@/components/ui/button'
+  import { useTelegramStore } from '../stores/telegram';
+  
+  const telegramStore = useTelegramStore();
   
   const userData = ref(null);
   const loading = ref(false);
