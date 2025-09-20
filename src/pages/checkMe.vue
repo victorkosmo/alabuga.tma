@@ -60,8 +60,9 @@
       // apiClient already includes the Authorization header via interceptor
       const response = await apiClient.get('/users/me');
   
-      if (response.data?.success && response.data?.data?.user) {
-        userData.value = response.data.data.user; // Store { id: '...', tg_id: ... }
+      // The backend's /users/me endpoint returns the user data directly under response.data.data
+      if (response.data?.data) {
+        userData.value = response.data.data; // Store { id: '...', tg_id: ... }
       } else {
         // Handle cases where API call succeeded but data indicates failure
         throw new Error(response.data?.message || 'Failed to get user data from response.');
