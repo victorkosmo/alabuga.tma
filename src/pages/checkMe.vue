@@ -39,53 +39,36 @@
     </div>
   </template>
   
-  <script setup>
-  import { ref } from 'vue';
-  import apiClient from '../services/apiService'; // Your configured Axios instance
-  import { Button } from '@/components/ui/button'
-  import { useTelegramStore } from '../stores/telegram';
-  
-  const telegramStore = useTelegramStore();
-  
-  const userData = ref(null);
-  const loading = ref(false);
-  const error = ref(null);
-  
-  const fetchUserData = async () => {
-    loading.value = true;
-    error.value = null;
-    userData.value = null; // Clear previous data
-  
-    try {
-      // apiClient already includes the Authorization header via interceptor
-      const response = await apiClient.get('/users/me');
-  
-      // The backend's /users/me endpoint returns the user data directly under response.data.data
-      if (response.data?.data) {
-        userData.value = response.data.data; // Store { id: '...', tg_id: ... }
-      } else {
-        // Handle cases where API call succeeded but data indicates failure
-        throw new Error(response.data?.message || 'Failed to get user data from response.');
-      }
-    } catch (err) {
-      // Error could be from network, 401 (handled by interceptor logout), 404, 500 etc.
-      console.error('Error fetching /auth/me:', err.response?.data || err.message || err);
-      error.value = err.response?.data?.message || err.message || 'Could not fetch user data.';
-      // If the error was 401, the interceptor should have already logged the user out
-      // and the router guard will redirect them away from this page soon.
-    } finally {
-      loading.value = false;
+<script setup>
+import { ref } from 'vue';
+import { get } from '@/services/apiService';
+import { Button } from '@/components/ui/button';
+import { useTelegramStore } from '@/stores/telegram';
+
+const telegramStore = useTelegramStore();
+
+const userData = ref(null);
+const loading = ref(false);
+const error = ref(null);
+
+const fetchUserData = async () => {
+  loading.value = true;
+  error.value = null;
+  userData.value = null;
+
+  try {
+    const response = await get('/users/me');
+    
+    if (response?.data) {
+      userData.value = response.data;
+    } else {
+      throw new Error('Failed to get user data from response.');
     }
-  };
-  
-  // Optionally fetch data automatically when the component loads
-  // import { onMounted } from 'vue';
-  // onMounted(() => {
-  //   fetchUserData();
-  // });
-  
-  </script>
-  
-  <style scoped>
-  /* All styles moved to Tailwind classes in the template */
-  </style>
+  } catch (err) {
+    console.error('Error fetching /users/me:', err);
+    error.value = err.message || 'Could not fetch user data.';
+  } finally {
+    loading.value = false;
+  }
+};
+</script>

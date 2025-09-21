@@ -1,8 +1,8 @@
 // src/stores/telegram.js
 import { defineStore } from 'pinia';
 import { telegramService } from '../services/telegramService';
-import apiClient from '../services/apiService';
-import router from '../router'; // <-- IMPORT THE ROUTER INSTANCE
+import { unauthorizedPost } from '../services/apiService';
+import router from '../router';
 
 const STORE_KEY_ACCESS_TOKEN = 'tma_accessToken';
 
@@ -11,7 +11,7 @@ export const useTelegramStore = defineStore('telegram', {
     tgUser: null,
     rawInitData: null,
     accessToken: localStorage.getItem(STORE_KEY_ACCESS_TOKEN) || null,
-    isInitialized: false, // Tracks completion of the entire init process
+    isInitialized: false,
     error: null,
     initializationPromise: null,
   }),
@@ -31,7 +31,7 @@ export const useTelegramStore = defineStore('telegram', {
 
       this.initializationPromise = (async () => {
         try {
-          // --- Development Mode ---
+          // Development Mode
           if (import.meta.env.VITE_ENV === 'development') {
             this.tgUser = { id: 12345, first_name: 'Dev', username: 'dev_user' };
             this.rawInitData = 'dev_mock_init_data';
@@ -40,7 +40,7 @@ export const useTelegramStore = defineStore('telegram', {
             return;
           }
 
-          // --- Production Mode ---
+          // Production Mode
           // 1. Initialize Telegram SDK
           const sdkResult = await telegramService.initialize();
           if (!sdkResult.success || !telegramService.webApp?.initData) {
@@ -49,32 +49,32 @@ export const useTelegramStore = defineStore('telegram', {
           this.tgUser = sdkResult.user;
           this.rawInitData = telegramService.webApp.initData;
 
-          // 2. Authenticate with Backend
-          const response = await apiClient.post('/auth/login', { initData: this.rawInitData });
+          // 2. Authenticate with Backend using unauthorizedPost
+          const response = await unauthorizedPost('/auth/login', { 
+            initData: this.rawInitData 
+          });
 
-          if (response.data?.success && response.data?.data?.access) {
+          if (response?.data?.success && response?.data?.data?.access) {
             this.setToken(response.data.data.access);
           } else {
-            throw new Error(response.data?.message || 'Backend authentication failed.');
+            throw new Error(response?.data?.message || 'Backend authentication failed.');
           }
 
         } catch (error) {
-          // --- THIS IS THE MODIFIED BLOCK ---
           const VITE_API_URL = import.meta.env.VITE_API_URL;
           let detailedMessage = `Original error: ${error.message}.`;
 
           if (error.message === 'Network Error') {
-            detailedMessage = `A "Network Error" occurred. This means the frontend application could not contact the backend server. This is almost always a backend CORS issue.\n\n`;
+            detailedMessage = `A "Network Error" occurred. This means the frontend application could not contact the backend server.\n\n`;
             detailedMessage += `Frontend Origin: ${window.location.origin}\n`;
-            detailedMessage += `Backend URL Target: ${VITE_API_URL || 'VITE_API_URL IS NOT SET in your frontend environment!'}\n\n`;
-            detailedMessage += `ACTION REQUIRED: On your backend server, you MUST configure CORS to allow requests from your frontend's origin.`;
+            detailedMessage += `Backend URL Target: ${VITE_API_URL || 'VITE_API_URL IS NOT SET!'}\n\n`;
+            detailedMessage += `ACTION REQUIRED: Configure CORS on your backend server.`;
           }
           
           const enhancedError = new Error(detailedMessage);
           enhancedError.stack = error.stack;
-          this.error = enhancedError; // Keep for state-tracking
+          this.error = enhancedError;
 
-          // Redirect to the dedicated error page
           router.push({
             name: 'error',
             query: {
@@ -82,9 +82,8 @@ export const useTelegramStore = defineStore('telegram', {
               stack: enhancedError.stack || 'No stack trace available.'
             }
           });
-          // --- END OF MODIFIED BLOCK ---
         } finally {
-          this.isInitialized = true; // Mark as "done" even on failure
+          this.isInitialized = true;
           this.initializationPromise = null;
         }
       })();
@@ -108,7 +107,6 @@ export const useTelegramStore = defineStore('telegram', {
       this.rawInitData = null;
       this.isInitialized = false;
       this.error = null;
-      // Navigate to home before reloading to ensure a clean retry
       router.push('/').then(() => {
         window.location.reload();
       });
