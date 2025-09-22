@@ -1,7 +1,7 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import { useTelegramStore } from '../stores/telegram';
-import Home from '../pages/index.vue';
+import Home from '../features/homePanel/homePanelView.vue';
 import Profile from '../pages/profile.vue';
 import Info from '../pages/info.vue';
 import TelegramData from '../pages/telegramData.vue';
