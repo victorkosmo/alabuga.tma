@@ -33,7 +33,7 @@ export const useTelegramStore = defineStore('telegram', {
         try {
           // Development Mode
           if (import.meta.env.VITE_ENV === 'development') {
-            this.tgUser = { id: 12345, first_name: 'Dev', username: 'dev_user' };
+            this.tgUser = { id: 99988877766, first_name: 'Dev', username: 'dev_user' };
             this.rawInitData = 'dev_mock_init_data';
             this.setToken('dev-mock-jwt-token');
             this.isInitialized = true;
