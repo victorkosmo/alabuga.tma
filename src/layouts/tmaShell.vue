@@ -11,11 +11,17 @@
         v-for="item in navConfig"
         :key="item.name"
         :to="item.path"
-        class="flex flex-col items-center justify-center text-muted-foreground w-full h-full transition-colors duration-200 ease-in-out"
-        active-class="text-primary"
+        custom
+        v-slot="{ navigate, isActive, isExactActive }"
       >
-        <component :is="item.icon" class="h-6 w-6 mb-1" />
-        <span class="text-xs font-medium">{{ item.label }}</span>
+        <a
+          @click="navigate"
+          class="flex flex-col items-center justify-center text-muted-foreground w-full h-full transition-colors duration-200 ease-in-out"
+          :class="{ 'text-primary': item.path === '/' ? isExactActive : isActive }"
+        >
+          <component :is="item.icon" class="h-6 w-6 mb-1" />
+          <span class="text-xs font-medium">{{ item.label }}</span>
+        </a>
       </router-link>
     </nav>
   </div>
