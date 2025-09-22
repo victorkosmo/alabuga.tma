@@ -2,7 +2,7 @@
 
 ## Overview
 
-Our Express backend follows a **strict response envelope pattern**. All API responses are wrapped in a standardized JSON structure. The frontend `fetch.js` automatically handles this pattern, but developers must understand the structure to properly consume responses.
+Our Express backend follows a **strict response envelope pattern**. All API responses are wrapped in a standardized JSON structure. The frontend `apiService.jss` automatically handles this pattern, but developers must understand the structure to properly consume responses.
 
 ## Standard Response Envelope
 
@@ -32,10 +32,10 @@ Our Express backend follows a **strict response envelope pattern**. All API resp
 
 ### Response Interceptor Behavior
 
-Our `fetch.js` automatically **unwraps** the envelope and returns the envelope object directly:
+Our `apiService.js` automatically **unwraps** the envelope and returns the envelope object directly:
 
 ```js
-// fetch.js automatically returns the full envelope
+// piService.js automatically returns the full envelope
 // You get: { success: true, data: [...], meta: {...} }
 // NOT: response.data.data
 ```
@@ -118,7 +118,7 @@ const fetchUser = async (id) => {
     try {
         user.value = await usersService.getUser(id);
     } catch (error) {
-        // Error message already shown by fetch.js
+        // Error message already shown by apiService.js
         console.error('Failed to load user:', error.message);
     }
 };
@@ -184,7 +184,7 @@ const loadContacts = async (filters = {}) => {
 1. **Always check `response.success`** before accessing data
 2. **Use `response.data`** for the actual payload (not `response.data.data`)
 3. **Use `response.meta`** for pagination and metadata
-4. **Error messages** are automatically shown by `fetch.js`
+4. **Error messages** are automatically shown by `piService.js`
 5. **Service layer** should handle envelope unwrapping
 6. **Components** receive predictable data structures
 
