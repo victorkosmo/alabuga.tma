@@ -31,33 +31,43 @@ export const useTelegramStore = defineStore('telegram', {
 
       this.initializationPromise = (async () => {
         try {
-          // Development Mode
-          if (import.meta.env.VITE_ENV === 'development') {
-            this.tgUser = { id: 99988877766, first_name: 'Dev', username: 'dev_user' };
-            this.rawInitData = 'dev_mock_init_data';
-            this.setToken('dev-mock-jwt-token');
-            this.isInitialized = true;
-            return;
-          }
+          let authResponse;
+          const isDev = import.meta.env.VITE_ENV === 'development';
 
-          // Production Mode
-          // 1. Initialize Telegram SDK
-          const sdkResult = await telegramService.initialize();
-          if (!sdkResult.success || !telegramService.webApp?.initData) {
-            throw new Error(sdkResult.error || 'Telegram SDK failed or initData is missing.');
-          }
-          this.tgUser = sdkResult.user;
-          this.rawInitData = telegramService.webApp.initData;
+          if (isDev) {
+            // In dev mode, we authenticate directly with a dev-specific endpoint.
+            // This bypasses the Telegram SDK and uses a pre-configured dev user on the backend.
+            console.log('[Store] Development mode: Authenticating as dev user...');
+            authResponse = await unauthorizedPost('/auth/login-dev');
 
-          // 2. Authenticate with Backend using unauthorizedPost
-          const response = await unauthorizedPost('/auth/login', { 
-            initData: this.rawInitData 
-          });
-
-          if (response?.data?.success && response?.data?.data?.access) {
-            this.setToken(response.data.data.access);
+            if (authResponse?.data?.success) {
+              // The user object is expected in the dev login response.
+              this.tgUser = authResponse.data.data.user;
+              this.rawInitData = 'development-mode';
+            }
           } else {
-            throw new Error(response?.data?.message || 'Backend authentication failed.');
+            // Production Mode: Standard Telegram Web App flow.
+            // 1. Initialize Telegram SDK.
+            const sdkResult = await telegramService.initialize();
+            if (!sdkResult.success || !telegramService.webApp?.initData) {
+              throw new Error(sdkResult.error || 'Telegram SDK failed or initData is missing.');
+            }
+            this.tgUser = sdkResult.user;
+            this.rawInitData = telegramService.webApp.initData;
+
+            // 2. Authenticate with Backend using initData.
+            authResponse = await unauthorizedPost('/auth/login', {
+              initData: this.rawInitData
+            });
+          }
+
+          // 3. Common: Process authentication response and set token.
+          if (authResponse?.data?.success && authResponse?.data?.data?.access) {
+            this.setToken(authResponse.data.data.access);
+          } else {
+            const failureReason = authResponse?.data?.message || 'Backend authentication failed.';
+            const mode = isDev ? 'dev ' : '';
+            throw new Error(`Backend ${mode}authentication failed: ${failureReason}`);
           }
 
         } catch (error) {
@@ -68,7 +78,7 @@ export const useTelegramStore = defineStore('telegram', {
             detailedMessage = `A "Network Error" occurred. This means the frontend application could not contact the backend server.\n\n`;
             detailedMessage += `Frontend Origin: ${window.location.origin}\n`;
             detailedMessage += `Backend URL Target: ${VITE_API_URL || 'VITE_API_URL IS NOT SET!'}\n\n`;
-            detailedMessage += `ACTION REQUIRED: Configure CORS on your backend server.`;
+            detailedMessage += `ACTION REQUIRED: Ensure the backend is running and CORS is configured correctly.`;
           }
           
           const enhancedError = new Error(detailedMessage);

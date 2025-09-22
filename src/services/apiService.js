@@ -76,7 +76,8 @@ apiInstance.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       // Skip refresh for auth endpoints
       if (originalRequest.url?.includes('/auth/login') || 
-          originalRequest.url?.includes('/auth/refresh')) {
+          originalRequest.url?.includes('/auth/refresh') ||
+          originalRequest.url?.includes('/auth/login-dev')) { // Added for dev login
         return handleErrorResponse(error);
       }
 
@@ -94,11 +95,10 @@ apiInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        // Attempt to refresh token using TMA init data
+        // Attempt to refresh token using TMA init data or dev login
         const { useTelegramStore } = await import('../stores/telegram');
         const telegramStore = useTelegramStore();
         
-        // For TMA, we re-authenticate with initData instead of refresh token
         const newToken = await refreshTMAToken(telegramStore);
         
         processQueue(null, newToken);
@@ -127,26 +127,38 @@ apiInstance.interceptors.response.use(
   }
 );
 
-// TMA-specific token refresh using initData
+// TMA-specific token refresh using initData or dev-login
 async function refreshTMAToken(telegramStore) {
-  const { telegramService } = await import('./telegramService');
-  
-  // In TMA, we use initData for re-authentication
-  if (!telegramService.webApp?.initData) {
-    throw new Error("No Telegram initData available for refresh");
-  }
-
   try {
-    const response = await unauthorizedInstance.post('/auth/login', {
-      initData: telegramService.webApp.initData
-    });
+    let response;
+    const isDev = import.meta.env.VITE_ENV === 'development';
+
+    if (isDev) {
+      console.log('[API] Refreshing token in dev mode...');
+      response = await unauthorizedInstance.post('/auth/login-dev');
+    } else {
+      // Production mode refresh
+      const { telegramService } = await import('./telegramService');
+      if (!telegramService.webApp?.initData) {
+        throw new Error("No Telegram initData available for refresh");
+      }
+      response = await unauthorizedInstance.post('/auth/login', {
+        initData: telegramService.webApp.initData
+      });
+    }
 
     if (response.data?.success && response.data?.data?.access) {
       const newToken = response.data.data.access;
       telegramStore.setToken(newToken);
+      
+      // In dev mode, the user object might be sent back as well
+      if (isDev && response.data.data.user) {
+        telegramStore.tgUser = response.data.data.user;
+      }
       return newToken;
     } else {
-      throw new Error("Invalid response from auth endpoint");
+      const endpoint = isDev ? '/auth/login-dev' : '/auth/login';
+      throw new Error(`Invalid response from ${endpoint} during refresh`);
     }
   } catch (error) {
     console.error('[API] Token refresh failed:', error);
