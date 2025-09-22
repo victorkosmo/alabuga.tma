@@ -7,13 +7,20 @@ import Info from '../pages/info.vue';
 import TelegramData from '../pages/telegramData.vue';
 import CheckMe from '../pages/checkMe.vue';
 import ErrorPage from '../pages/error.vue';
+import TmaShell from '../layouts/tmaShell.vue';
 
 const routes = [
-    { path: '/', name: 'home', component: Home },
-    { path: '/profile', name: 'profile', component: Profile },
-    { path: '/info', name: 'info', component: Info },
-    { path: '/check-me', name: 'checkMe', component: CheckMe },
-    { path: '/telegram-data', name: 'telegram-data', component: TelegramData },
+    {
+        path: '/',
+        component: TmaShell,
+        children: [
+            { path: '', name: 'home', component: Home },
+            { path: 'profile', name: 'profile', component: Profile },
+            { path: 'info', name: 'info', component: Info },
+            { path: 'check-me', name: 'checkMe', component: CheckMe },
+            { path: 'telegram-data', name: 'telegram-data', component: TelegramData },
+        ]
+    },
     { path: '/error', name: 'error', component: ErrorPage },
 ];
 
