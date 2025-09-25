@@ -1,12 +1,5 @@
 <template>
   <div class="p-4 md:p-6">
-    <!-- Back Button -->
-    <router-link to="/" class="mb-6 block">
-      <Button variant="outline" size="lg" class="w-full">
-        <ArrowLeft class="mr-2 h-5 w-5" />
-        Back
-      </Button>
-    </router-link>
 
     <!-- Loading State -->
     <div v-if="loading" class="space-y-6">
@@ -40,12 +33,20 @@
 
     <!-- Content -->
     <div v-else-if="campaign" class="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle class="text-2xl">{{ campaign.name }}</CardTitle>
-          <CardDescription v-if="campaign.description">{{ campaign.description }}</CardDescription>
-        </CardHeader>
-      </Card>
+    <div class="flex w-full gap-2">
+        <router-link to="/" class="h-full items-center">
+            <Button variant="outline" size="lg" class="w-full">
+                <ArrowLeft class="mr-2 h-5 w-5" />
+                Back
+            </Button>
+        </router-link>
+          <Card class="w-full">
+            <CardHeader>
+              <CardTitle class="text-2xl">{{ campaign.name }}</CardTitle>
+              <CardDescription v-if="campaign.description">{{ campaign.description }}</CardDescription>
+            </CardHeader>
+          </Card>
+    </div>
 
       <Card>
         <CardHeader>
