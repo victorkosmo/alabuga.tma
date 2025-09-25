@@ -58,7 +58,7 @@ onMounted(async () => {
   loading.value = true;
   error.value = null;
   try {
-    mission.value = await getMissionById(missionId);
+    mission.value = await getMissionById(campaignId, missionId);
   } catch (err) {
     error.value = err;
     console.error('Failed to fetch mission data:', err);

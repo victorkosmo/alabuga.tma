@@ -1,12 +1,13 @@
 import { get, post } from '@/services/apiService';
 
 /**
- * Fetches details for a specific mission.
+ * Fetches details for a specific mission within a campaign.
+ * @param {string} campaignId - The ID of the campaign.
  * @param {string} missionId - The ID of the mission.
  * @returns {Promise<Object>} The mission data.
  */
-export const getMissionById = async (missionId) => {
-  const response = await get(`/missions/${missionId}`);
+export const getMissionById = async (campaignId, missionId) => {
+  const response = await get(`/campaigns/${campaignId}/missions/${missionId}`);
   if (response.success) {
     return response.data;
   }
