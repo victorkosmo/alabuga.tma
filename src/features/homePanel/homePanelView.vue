@@ -98,8 +98,7 @@
       </Card>
 
       <!-- Campaigns Section -->
-      <CampaignsList v-if="campaigns.length > 0" :campaigns="campaigns" />
-      <JoinCampaignForm v-else @campaign-joined="fetchData" />
+      <CampaignsList :campaigns="campaigns" @campaign-joined="fetchData" />
     </div>
   </div>
 </template>
@@ -109,7 +108,6 @@ import { ref, onMounted } from 'vue';
 import { getMe } from './services/user.service';
 import { getCampaigns } from './services/campaign.service';
 import CampaignsList from './components/CampaignsList.vue';
-import JoinCampaignForm from './components/JoinCampaignForm.vue';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
