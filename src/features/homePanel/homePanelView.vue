@@ -37,10 +37,20 @@
           </div>
         </CardContent>
       </Card>
+
+      <!-- Campaigns Card Skeleton -->
+      <Card>
+        <CardHeader>
+          <Skeleton class="h-7 w-32" />
+        </CardHeader>
+        <CardContent>
+          <Skeleton class="h-10 w-full" />
+        </CardContent>
+      </Card>
     </div>
 
     <div v-else-if="error" class="text-center py-10 text-destructive">
-      <p>Error loading user data: {{ error.message }}</p>
+      <p>Error loading data: {{ error.message }}</p>
     </div>
 
     <div v-else-if="user" class="space-y-6">
@@ -86,6 +96,9 @@
           </div>
         </CardContent>
       </Card>
+
+      <!-- Campaigns Section -->
+      <CampaignsList :campaigns="campaigns" @campaign-joined="fetchData" />
     </div>
   </div>
 </template>
@@ -93,6 +106,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getMe } from './services/user.service';
+import { getCampaigns } from './services/campaign.service';
+import CampaignsList from './components/CampaignsList.vue';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -100,18 +115,31 @@ import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const user = ref(null);
+const campaigns = ref([]);
 const loading = ref(true);
 const error = ref(null);
 
-onMounted(async () => {
+const fetchData = async () => {
+  // Set loading to true only on initial load, not on subsequent fetches
+  if (!user.value) {
+    loading.value = true;
+  }
+  error.value = null;
+
   try {
-    error.value = null;
-    user.value = await getMe();
+    const [userResult, campaignsResult] = await Promise.all([
+      getMe(),
+      getCampaigns(),
+    ]);
+    user.value = userResult;
+    campaigns.value = campaignsResult;
   } catch (err) {
     error.value = err;
-    console.error('Failed to fetch user profile:', err);
+    console.error('Failed to fetch home panel data:', err);
   } finally {
     loading.value = false;
   }
-});
+};
+
+onMounted(fetchData);
 </script>
