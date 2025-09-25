@@ -20,7 +20,7 @@ export const getCampaignById = async (campaignId) => {
  * @returns {Promise<Array<Object>>} The list of missions.
  */
 export const getCampaignMissions = async (campaignId) => {
-  const response = await get(`/telegram/campaigns/${campaignId}/missions`);
+  const response = await get(`/campaigns/${campaignId}/missions`);
   if (response.success) {
     return response.data;
   }
