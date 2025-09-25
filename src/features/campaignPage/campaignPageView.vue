@@ -1,5 +1,13 @@
 <template>
   <div class="p-4 md:p-6">
+    <!-- Back Button -->
+    <router-link to="/" class="mb-6 block">
+      <Button variant="outline" size="lg" class="w-full">
+        <ArrowLeft class="mr-2 h-5 w-5" />
+        Back
+      </Button>
+    </router-link>
+
     <!-- Loading State -->
     <div v-if="loading" class="space-y-6">
       <Card>
@@ -78,6 +86,7 @@ import { useRoute } from 'vue-router';
 import { getCampaignById, getCampaignMissions } from './services/campaign.service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ArrowLeft } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
