@@ -8,6 +8,7 @@ import TelegramData from '../pages/telegramData.vue';
 import CheckMe from '../pages/checkMe.vue';
 import ErrorPage from '../pages/error.vue';
 import TmaShell from '../layouts/tmaShell.vue';
+import CampaignPage from '@/features/campaignPage/campaignPageView.vue';
 
 const routes = [
     {
@@ -21,6 +22,7 @@ const routes = [
             { path: 'telegram-data', name: 'telegram-data', component: TelegramData },
         ]
     },
+    { path: '/campaign/:id', name: 'Campaign', component: CampaignPage },
     { path: '/error', name: 'error', component: ErrorPage },
 ];
 
