@@ -67,7 +67,9 @@
                 <div class="flex-shrink-0 ml-4">
                   <Badge v-if="mission.is_completed" variant="secondary">Completed</Badge>
                   <Badge v-else-if="mission.is_locked" variant="destructive">Locked</Badge>
-                  <Button v-else size="sm">Start</Button>
+                  <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: campaignId, missionId: mission.id } }">
+                    <Button size="sm">Start</Button>
+                  </router-link>
                 </div>
               </div>
             </div>

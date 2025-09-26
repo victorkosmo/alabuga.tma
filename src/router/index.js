@@ -9,6 +9,7 @@ import CheckMe from '../pages/checkMe.vue';
 import ErrorPage from '../pages/error.vue';
 import TmaShell from '../layouts/tmaShell.vue';
 import CampaignPage from '@/features/campaignPage/campaignPageView.vue';
+import missionSubmitForm from '@/features/missionSubmitForm/missionSubmitFormView.vue';
 
 const routes = [
     {
@@ -23,6 +24,7 @@ const routes = [
         ]
     },
     { path: '/campaign/:id', name: 'Campaign', component: CampaignPage },
+    { path: '/campaign/:campaignId/mission/:missionId/submit', name: 'Завершить миссию', component: missionSubmitForm },
     { path: '/error', name: 'error', component: ErrorPage },
 ];
 
