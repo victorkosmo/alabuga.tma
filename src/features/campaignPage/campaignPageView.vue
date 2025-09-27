@@ -54,22 +54,28 @@
         </CardHeader>
         <CardContent>
           <div v-if="missions.length > 0" class="space-y-4">
-            <div v-for="mission in missions" :key="mission.id" class="p-4 border rounded-md" :class="{ 'opacity-50': mission.is_locked }">
+            <div v-for="mission in missions" :key="mission.id" class="p-4 border rounded-md">
               <div class="flex justify-between items-start">
                 <div>
                   <h3 class="font-semibold">{{ mission.title }}</h3>
                   <p v-if="mission.description" class="text-sm text-muted-foreground mt-1">{{ mission.description }}</p>
-                  <p v-if="mission.is_locked && mission.required_achievement_name" class="text-xs text-destructive mt-1">
-                    Requires "{{ mission.required_achievement_name }}" achievement to unlock.
-                  </p>
+                  
                   <div class="flex items-center gap-4 mt-2 text-sm">
-                    <span v-if="mission.experience_reward > 0" class="font-semibold text-primary">{{ mission.experience_reward }} XP</span>
                     <span v-if="mission.mana_reward > 0" class="font-semibold text-blue-500">{{ mission.mana_reward }} MP</span>
                   </div>
                 </div>
                 <div class="flex-shrink-0 ml-4">
                   <Badge v-if="mission.is_completed" variant="secondary">Completed</Badge>
-                  <Badge v-else-if="mission.is_locked" variant="destructive">Locked</Badge>
+                  <template v-else-if="mission.is_locked">
+                    <AchievementLockBadge
+                      v-if="mission.required_achievement_name"
+                      :achievement-name="mission.required_achievement_name"
+                    />
+                    <Badge v-else variant="destructive" class="flex items-center gap-1">
+                      <Lock class="h-3 w-3" />
+                      Locked
+                    </Badge>
+                  </template>
                   <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: campaignId, missionId: mission.id } }">
                     <Button size="sm">Start</Button>
                   </router-link>
@@ -92,9 +98,10 @@ import { useRoute } from 'vue-router';
 import { getCampaignById, getCampaignMissions } from './services/campaign.service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft } from 'lucide-vue-next';
+import { ArrowLeft, Lock } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import AchievementLockBadge from './components/AchievementLockBadge.vue';
 
 const route = useRoute();
 const campaignId = route.params.id;
