@@ -59,6 +59,9 @@
                 <div>
                   <h3 class="font-semibold">{{ mission.title }}</h3>
                   <p v-if="mission.description" class="text-sm text-muted-foreground mt-1">{{ mission.description }}</p>
+                  <p v-if="mission.is_locked && mission.required_achievement_name" class="text-xs text-destructive mt-1">
+                    Requires "{{ mission.required_achievement_name }}" achievement to unlock.
+                  </p>
                   <div class="flex items-center gap-4 mt-2 text-sm">
                     <span v-if="mission.experience_reward > 0" class="font-semibold text-primary">{{ mission.experience_reward }} XP</span>
                     <span v-if="mission.mana_reward > 0" class="font-semibold text-blue-500">{{ mission.mana_reward }} MP</span>
