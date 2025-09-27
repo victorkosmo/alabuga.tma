@@ -111,6 +111,7 @@
                       Locked
                     </Badge>
                   </template>
+                  <Badge v-else-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">Pending Review</Badge>
                   <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: campaignId, missionId: mission.id } }">
                     <Button size="sm">Start</Button>
                   </router-link>
