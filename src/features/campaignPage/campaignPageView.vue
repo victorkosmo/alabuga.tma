@@ -10,6 +10,20 @@
           <Skeleton class="h-4 w-2/3 mt-1" />
         </CardHeader>
       </Card>
+
+      <!-- ADD THIS SKELETON CARD -->
+      <Card>
+        <CardHeader>
+          <Skeleton class="h-7 w-40" />
+        </CardHeader>
+        <CardContent class="flex gap-4">
+          <div v-for="i in 4" :key="i" class="flex flex-col items-center gap-2">
+            <Skeleton class="h-10 w-10 rounded-full" />
+            <Skeleton class="h-4 w-16" />
+          </div>
+        </CardContent>
+      </Card>
+
       <Card>
         <CardHeader>
           <Skeleton class="h-7 w-28" />
@@ -47,6 +61,27 @@
             </CardHeader>
           </Card>
     </div>
+
+    <!-- ADD THIS ENTIRE CARD -->
+    <Card>
+      <CardHeader>
+        <CardTitle>Your Achievements</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div v-if="userAchievements.length > 0" class="flex flex-wrap gap-4">
+          <div v-for="achievement in userAchievements" :key="achievement.id" class="flex flex-col items-center gap-2 w-20 text-center">
+            <Avatar>
+              <AvatarImage :src="achievement.image_url" :alt="achievement.name" />
+              <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
+            </Avatar>
+            <span class="text-xs font-medium leading-tight">{{ achievement.name }}</span>
+          </div>
+        </div>
+        <div v-else class="text-center text-muted-foreground py-4">
+          <p>No achievements yet. Complete missions to unlock them!</p>
+        </div>
+      </CardContent>
+    </Card>
 
       <Card>
         <CardHeader>
@@ -95,19 +130,21 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { getCampaignById, getCampaignMissions } from './services/campaign.service';
+import { getCampaignById, getCampaignMissions, getUserCampaignAchievements } from './services/campaign.service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, Lock } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AchievementLockBadge from './components/AchievementLockBadge.vue';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const route = useRoute();
 const campaignId = route.params.id;
 
 const campaign = ref(null);
 const missions = ref([]);
+const userAchievements = ref([]); // Add this line
 const loading = ref(true);
 const error = ref(null);
 
@@ -115,12 +152,14 @@ const fetchData = async () => {
   loading.value = true;
   error.value = null;
   try {
-    const [campaignResult, missionsResult] = await Promise.all([
+    const [campaignResult, missionsResult, achievementsResult] = await Promise.all([
       getCampaignById(campaignId),
       getCampaignMissions(campaignId),
+      getUserCampaignAchievements(campaignId),
     ]);
     campaign.value = campaignResult;
     missions.value = missionsResult;
+    userAchievements.value = achievementsResult; // Add this line
   } catch (err) {
     error.value = err;
     console.error('Failed to fetch campaign data:', err);
