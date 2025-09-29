@@ -3,39 +3,19 @@
     <div v-if="loading" class="space-y-6">
       <!-- User Profile Card Skeleton -->
       <Card>
-        <CardHeader class="flex flex-row items-center gap-4">
-          <Skeleton class="h-16 w-16 rounded-full" />
-          <div class="space-y-2">
-            <Skeleton class="h-6 w-48" />
-            <Skeleton class="h-4 w-32" />
+        <CardHeader class="flex flex-row items-center justify-between gap-4">
+          <div class="flex flex-row items-center gap-4">
+            <Skeleton class="h-16 w-16 rounded-full" />
+            <div class="space-y-2">
+              <Skeleton class="h-6 w-48" />
+              <Skeleton class="h-4 w-32" />
+            </div>
+          </div>
+          <div class="space-y-2 text-right">
+            <Skeleton class="h-6 w-20 ml-auto" />
+            <Skeleton class="h-4 w-12 ml-auto" />
           </div>
         </CardHeader>
-        <CardContent>
-          <Skeleton class="h-6 w-24" />
-        </CardContent>
-      </Card>
-
-      <!-- Stats Card Skeleton -->
-      <Card>
-        <CardHeader>
-          <Skeleton class="h-7 w-20" />
-        </CardHeader>
-        <CardContent class="space-y-4">
-          <div>
-            <div class="flex justify-between mb-2">
-              <Skeleton class="h-4 w-24" />
-              <Skeleton class="h-4 w-16" />
-            </div>
-            <Skeleton class="h-2 w-full" />
-          </div>
-          <div>
-            <div class="flex justify-between mb-2">
-              <Skeleton class="h-4 w-16" />
-              <Skeleton class="h-4 w-12" />
-            </div>
-            <Skeleton class="h-2 w-full" />
-          </div>
-        </CardContent>
       </Card>
 
       <!-- Campaigns Card Skeleton -->
@@ -56,45 +36,22 @@
     <div v-else-if="user" class="space-y-6">
       <!-- User Profile Card -->
       <Card>
-        <CardHeader class="flex flex-row items-center gap-4">
-          <Avatar class="h-16 w-16">
-            <AvatarImage :src="user.avatar_url" :alt="user.username" />
-            <AvatarFallback>{{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}</AvatarFallback>
-          </Avatar>
-          <div>
-            <CardTitle class="text-2xl">{{ user.first_name }} {{ user.last_name }}</CardTitle>
-            <CardDescription>@{{ user.username }}</CardDescription>
+        <CardHeader class="flex flex-row items-center justify-between gap-4">
+          <div class="flex flex-row items-center gap-4">
+            <Avatar class="h-16 w-16">
+              <AvatarImage :src="user.avatar_url" :alt="user.username" />
+              <AvatarFallback>{{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}</AvatarFallback>
+            </Avatar>
+            <div>
+              <CardTitle class="text-2xl">{{ user.first_name }} {{ user.last_name }}</CardTitle>
+              <CardDescription>@{{ user.username }}</CardDescription>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="font-semibold text-lg">{{ user.mana_points }} MP</div>
+            <div class="text-sm text-muted-foreground">Mana</div>
           </div>
         </CardHeader>
-        <CardContent>
-          <div class="flex items-center gap-2">
-            <Badge variant="secondary">Rank</Badge>
-            <span class="font-semibold">{{ user.rank_title }}</span>
-          </div>
-        </CardContent>
-      </Card>
-
-      <!-- Stats Card -->
-      <Card>
-        <CardHeader>
-          <CardTitle>Stats</CardTitle>
-        </CardHeader>
-        <CardContent class="space-y-4">
-          <div>
-            <div class="flex justify-between mb-1">
-              <span class="text-sm font-medium text-muted-foreground">Experience</span>
-              <span class="text-sm font-medium">{{ user.experience_points }} XP</span>
-            </div>
-            <Progress :model-value="75" class="h-2" /> <!-- TODO: Calculate progress based on rank thresholds -->
-          </div>
-          <div>
-            <div class="flex justify-between mb-1">
-              <span class="text-sm font-medium text-muted-foreground">Mana</span>
-              <span class="text-sm font-medium">{{ user.mana_points }} MP</span>
-            </div>
-            <Progress :model-value="50" class="h-2" /> <!-- TODO: Calculate progress based on max mana -->
-          </div>
-        </CardContent>
       </Card>
 
       <!-- Campaigns Section -->
@@ -108,10 +65,8 @@ import { ref, onMounted } from 'vue';
 import { getMe } from './services/user.service';
 import { getCampaigns } from './services/campaign.service';
 import CampaignsList from './components/CampaignsList.vue';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const user = ref(null);
