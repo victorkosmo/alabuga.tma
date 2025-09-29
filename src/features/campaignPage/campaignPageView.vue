@@ -42,7 +42,7 @@
 
     <!-- Error State -->
     <div v-else-if="error" class="text-center py-10 text-destructive">
-      <p>Error loading campaign data: {{ error.message }}</p>
+      <p>Ошибка загрузки данных кампании: {{ error.message }}</p>
     </div>
 
     <!-- Content -->
@@ -51,7 +51,7 @@
         <router-link to="/" class="h-full items-center">
             <Button variant="outline" size="lg" class="w-full">
                 <ArrowLeft class="mr-2 h-5 w-5" />
-                Back
+                Назад
             </Button>
         </router-link>
           <Card class="w-full">
@@ -65,7 +65,7 @@
     <!-- ADD THIS ENTIRE CARD -->
     <Card>
       <CardHeader>
-        <CardTitle>Your Achievements</CardTitle>
+        <CardTitle>Ваши достижения</CardTitle>
       </CardHeader>
       <CardContent>
         <div v-if="userAchievements.length > 0" class="flex flex-wrap gap-4">
@@ -78,14 +78,14 @@
           </div>
         </div>
         <div v-else class="text-center text-muted-foreground py-4">
-          <p>No achievements yet. Complete missions to unlock them!</p>
+          <p>Пока нет достижений. Выполняйте миссии, чтобы разблокировать их!</p>
         </div>
       </CardContent>
     </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Missions</CardTitle>
+          <CardTitle>Миссии</CardTitle>
         </CardHeader>
         <CardContent>
           <div v-if="missions.length > 0" class="space-y-4">
@@ -100,7 +100,7 @@
                   </div>
                 </div>
                 <div class="flex-shrink-0 ml-4">
-                  <Badge v-if="mission.is_completed" variant="secondary">Completed</Badge>
+                  <Badge v-if="mission.is_completed" variant="secondary">Завершено</Badge>
                   <template v-else-if="mission.is_locked">
                     <AchievementLockBadge
                       v-if="mission.required_achievement_name"
@@ -108,19 +108,19 @@
                     />
                     <Badge v-else variant="destructive" class="flex items-center gap-1">
                       <Lock class="h-3 w-3" />
-                      Locked
+                      Заблокировано
                     </Badge>
                   </template>
-                  <Badge v-else-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">Pending Review</Badge>
+                  <Badge v-else-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
                   <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: campaignId, missionId: mission.id } }">
-                    <Button size="sm">Start</Button>
+                    <Button size="sm">Начать</Button>
                   </router-link>
                 </div>
               </div>
             </div>
           </div>
           <div v-else class="text-center text-muted-foreground py-4">
-            <p>No missions available for this campaign yet.</p>
+            <p>Пока нет доступных миссий для этой кампании.</p>
           </div>
         </CardContent>
       </Card>

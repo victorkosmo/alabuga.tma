@@ -10,7 +10,7 @@ export const getCampaignById = async (campaignId) => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Failed to fetch campaign details');
+  throw new Error(response.error?.message || 'Не удалось получить детали кампании');
 };
 
 
@@ -24,7 +24,7 @@ export const getCampaignMissions = async (campaignId) => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Failed to fetch campaign missions');
+  throw new Error(response.error?.message || 'Не удалось получить миссии кампании');
 };
 
 /**
@@ -37,5 +37,5 @@ export const getUserCampaignAchievements = async (campaignId) => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Failed to fetch user achievements');
+  throw new Error(response.error?.message || 'Не удалось получить достижения пользователя');
 };
