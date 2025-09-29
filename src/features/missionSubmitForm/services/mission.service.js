@@ -11,7 +11,7 @@ export const getMissionById = async (campaignId, missionId) => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Failed to fetch mission details');
+  throw new Error(response.error?.message || 'Не удалось получить детали миссии');
 };
 
 /**
@@ -28,5 +28,5 @@ export const submitUrlCompletion = async (missionId, submissionUrl) => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Failed to submit URL');
+  throw new Error(response.error?.message || 'Не удалось отправить URL');
 };

@@ -9,5 +9,5 @@ export const getAvailableMissions = async () => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Failed to fetch available missions');
+  throw new Error(response.error?.message || 'Не удалось получить доступные миссии');
 };
