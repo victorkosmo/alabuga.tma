@@ -2,13 +2,13 @@
   <div class="p-4 md:p-6">
     <!-- Loading State -->
     <div v-if="loading">
-      <p>Loading mission...</p>
+      <p>Загрузка миссии...</p>
       <!-- TODO: Add skeleton loaders for better UX -->
     </div>
 
     <!-- Error State -->
     <div v-else-if="error" class="text-center py-10 text-destructive">
-      <p>Error loading mission data: {{ error.message }}</p>
+      <p>Ошибка загрузки данных миссии: {{ error.message }}</p>
     </div>
 
     <!-- Content -->
@@ -17,7 +17,7 @@
         <router-link :to="`/campaign/${campaignId}`" class="h-full items-center">
             <Button variant="outline" size="lg" class="w-full">
                 <ArrowLeft class="mr-2 h-5 w-5" />
-                Back
+                Назад
             </Button>
         </router-link>
         <Card class="w-full">
@@ -31,7 +31,7 @@
       <!-- Mission Type Dispatcher -->
       <UrlSubmissionForm v-if="mission.type === 'MANUAL_URL'" :mission="mission" :campaign-id="campaignId" />
       <div v-else>
-        <p>This mission type ({{ mission.type }}) is not supported yet.</p>
+        <p>Этот тип миссии ({{ mission.type }}) пока не поддерживается.</p>
       </div>
     </div>
   </div>

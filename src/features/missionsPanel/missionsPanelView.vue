@@ -34,7 +34,7 @@
 
     <!-- Error State -->
     <div v-else-if="error" class="text-center py-10 text-destructive">
-      <p>Error loading missions: {{ error.message }}</p>
+      <p>Ошибка загрузки миссий: {{ error.message }}</p>
     </div>
 
     <!-- Content -->
@@ -42,7 +42,7 @@
       <!-- Available Missions -->
       <Card>
         <CardHeader>
-          <CardTitle>Available Missions</CardTitle>
+          <CardTitle>Доступные миссии</CardTitle>
         </CardHeader>
         <CardContent>
           <div v-if="availableMissions.length > 0" class="space-y-4">
@@ -56,16 +56,16 @@
                   </div>
                 </div>
                 <div class="flex-shrink-0 ml-4">
-                  <Badge v-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">Pending Review</Badge>
+                  <Badge v-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
                   <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: mission.campaign_id, missionId: mission.id } }">
-                    <Button size="sm">Start</Button>
+                    <Button size="sm">Начать</Button>
                   </router-link>
                 </div>
               </div>
             </div>
           </div>
           <div v-else class="text-center text-muted-foreground py-4">
-            <p>No available missions right now. Check back later!</p>
+            <p>Сейчас нет доступных миссий. Загляните позже!</p>
           </div>
         </CardContent>
       </Card>
@@ -73,7 +73,7 @@
       <!-- Locked Missions -->
       <Card v-if="lockedMissions.length > 0">
         <CardHeader>
-          <CardTitle>Locked Missions</CardTitle>
+          <CardTitle>Заблокированные миссии</CardTitle>
         </CardHeader>
         <CardContent>
           <div class="space-y-4">
@@ -93,7 +93,7 @@
                   />
                   <Badge v-else variant="destructive" class="flex items-center gap-1">
                     <Lock class="h-3 w-3" />
-                    Locked
+                    Заблокировано
                   </Badge>
                 </div>
               </div>

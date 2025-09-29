@@ -1,13 +1,13 @@
 <template>
   <Card>
     <CardHeader>
-      <CardTitle>Submit URL</CardTitle>
-      <CardDescription>Please provide the URL for your submission. It will be reviewed by an administrator.</CardDescription>
+      <CardTitle>Отправить URL</CardTitle>
+      <CardDescription>Пожалуйста, укажите URL для вашей заявки. Она будет рассмотрена администратором.</CardDescription>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div>
-          <Label for="submissionUrl">Submission URL</Label>
+          <Label for="submissionUrl">URL для отправки</Label>
           <Input
             id="submissionUrl"
             v-model="submissionUrl"
@@ -18,7 +18,7 @@
           />
         </div>
         <Button type="submit" :disabled="isSubmitting">
-          {{ isSubmitting ? 'Submitting...' : 'Submit for Review' }}
+          {{ isSubmitting ? 'Отправка...' : 'Отправить на проверку' }}
         </Button>
         <p v-if="error" class="text-sm text-destructive">{{ error }}</p>
       </form>
@@ -57,12 +57,12 @@ const handleSubmit = async () => {
   error.value = null;
   try {
     await submitUrlCompletion(props.mission.id, submissionUrl.value);
-    successMessage('Submission successful! It is now pending review.');
+    successMessage('Заявка успешно отправлена! Она ожидает рассмотрения.');
     // Redirect back to the campaign page
     router.push(`/campaign/${props.campaignId}`);
   } catch (err) {
-    error.value = err.message || 'An unknown error occurred.';
-    console.error('Failed to submit URL:', err);
+    error.value = err.message || 'Произошла неизвестная ошибка.';
+    console.error('Не удалось отправить URL:', err);
   } finally {
     isSubmitting.value = false;
   }
