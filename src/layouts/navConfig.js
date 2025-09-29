@@ -1,4 +1,4 @@
-import { Home, User, Rocket, Settings } from 'lucide-vue-next';
+import { Rocket, Settings, Crosshair, Vault } from 'lucide-vue-next';
 
 /**
  * @typedef {Object} NavItem
@@ -16,25 +16,25 @@ export const navConfig = [
   {
     name: 'home',
     path: '/',
-    label: 'Home',
-    icon: Home,
-  },
-  {
-    name: 'profile',
-    path: '/profile',
-    label: 'Profile',
-    icon: User,
-  },
-  {
-    name: 'checkMe',
-    path: '/check-me',
-    label: 'Check',
+    label: 'События',
     icon: Rocket,
   },
   {
-    name: 'telegram-data',
-    path: '/telegram-data',
-    label: 'TG Data',
+    name: 'missions',
+    path: '/missions',
+    label: 'Миссии',
+    icon: Crosshair,
+  },
+  {
+    name: 'store',
+    path: '/store',
+    label: 'Магазин',
+    icon: Vault,
+  },
+  {
+    name: 'setings',
+    path: '/settings',
+    label: 'Профиль',
     icon: Settings,
   },
 ];
