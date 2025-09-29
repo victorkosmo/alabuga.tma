@@ -1,0 +1,13 @@
+import { get } from '@/services/apiService';
+
+/**
+ * Fetches all available and locked missions for the current user.
+ * @returns {Promise<{available_missions: Array<Object>, locked_missions: Array<Object>}>} An object containing available and locked missions.
+ */
+export const getAvailableMissions = async () => {
+  const response = await get('/missions/available');
+  if (response.success) {
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to fetch available missions');
+};
