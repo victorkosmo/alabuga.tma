@@ -1,7 +1,26 @@
 <template>
   <div class="p-4 md:p-6">
     <div v-if="loading" class="space-y-6">
-      <!-- Skeleton Loader -->
+      <!-- User Profile Card Skeleton -->
+      <Card>
+        <CardHeader class="flex flex-row items-center justify-between gap-4">
+          <div class="flex flex-row items-center gap-4">
+            <Skeleton class="h-16 w-16 rounded-full" />
+            <div class="space-y-2">
+              <Skeleton class="h-6 w-32" />
+              <Skeleton class="h-4 w-24" />
+            </div>
+          </div>
+          <div class="space-y-2 text-right">
+            <Skeleton class="h-6 w-20 ml-auto" />
+            <Skeleton class="h-4 w-12 ml-auto" />
+            <Skeleton class="h-6 w-20 ml-auto mt-1" />
+            <Skeleton class="h-4 w-12 ml-auto" />
+          </div>
+        </CardHeader>
+      </Card>
+
+      <!-- Form Skeleton -->
       <Card>
         <CardHeader>
           <Skeleton class="h-7 w-48" />
@@ -27,30 +46,59 @@
       <p>Ошибка загрузки данных: {{ fetchError.message }}</p>
     </div>
 
-    <form v-else-if="user" @submit.prevent="handleSave" class="space-y-6">
+    <div v-else-if="user" class="space-y-6">
+      <!-- User Profile Display -->
       <Card>
-        <CardHeader>
-          <CardTitle>Настройки профиля</CardTitle>
-          <CardDescription>Здесь вы можете обновить информацию о своем профиле.</CardDescription>
+        <CardHeader class="flex flex-row items-center justify-between gap-4">
+          <div class="flex flex-row items-center gap-4">
+            <Avatar class="h-16 w-16">
+              <AvatarImage :src="user.avatar_url" :alt="user.username" />
+              <AvatarFallback>{{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}</AvatarFallback>
+            </Avatar>
+            <div>
+              <CardTitle class="text-2xl">@{{ user.username }}</CardTitle>
+              <CardDescription>{{ user.rank_title }}</CardDescription>
+            </div>
+          </div>
+          <div class="text-right space-y-1">
+            <div>
+              <div class="font-semibold text-lg">{{ user.mana_points }} MP</div>
+              <div class="text-sm text-muted-foreground">Мана</div>
+            </div>
+            <div>
+              <div class="font-semibold text-lg">{{ user.experience_points }} XP</div>
+              <div class="text-sm text-muted-foreground">Опыт</div>
+            </div>
+          </div>
         </CardHeader>
-        <CardContent class="space-y-4">
-          <div class="space-y-2">
-            <Label for="first_name">Имя</Label>
-            <Input id="first_name" v-model="formData.first_name" required />
-          </div>
-          <div class="space-y-2">
-            <Label for="last_name">Фамилия</Label>
-            <Input id="last_name" v-model="formData.last_name" />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button type="submit" :disabled="!isDirty || isSaving">
-            <span v-if="isSaving">Сохранение...</span>
-            <span v-else>Сохранить</span>
-          </Button>
-        </CardFooter>
       </Card>
-    </form>
+
+      <!-- Edit Profile Form -->
+      <form @submit.prevent="handleSave">
+        <Card>
+          <CardHeader>
+            <CardTitle>Редактировать профиль</CardTitle>
+            <CardDescription>Здесь вы можете обновить имя и фамилию.</CardDescription>
+          </CardHeader>
+          <CardContent class="space-y-4">
+            <div class="space-y-2">
+              <Label for="first_name">Имя</Label>
+              <Input id="first_name" v-model="formData.first_name" required />
+            </div>
+            <div class="space-y-2">
+              <Label for="last_name">Фамилия</Label>
+              <Input id="last_name" v-model="formData.last_name" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" :disabled="!isDirty || isSaving">
+              <span v-if="isSaving">Сохранение...</span>
+              <span v-else>Сохранить</span>
+            </Button>
+          </CardFooter>
+        </Card>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -60,6 +108,7 @@ import { getMe } from '@/features/homePanel/services/user.service';
 import { updateMe } from './services/user.service';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
