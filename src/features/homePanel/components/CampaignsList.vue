@@ -1,9 +1,9 @@
 <template>
   <Card>
     <CardHeader class="flex flex-row items-center justify-between">
-      <CardTitle>Your Campaigns</CardTitle>
-      <Button variant="outline" size="sm" @click="isJoinDialogOpen = true">
-        Join Campaign
+      <CardTitle>Ваши кампании</CardTitle>
+      <Button size="sm" @click="isJoinDialogOpen = true">
+        Присоединиться
       </Button>
     </CardHeader>
     <CardContent>
@@ -16,8 +16,8 @@
         </router-link>
       </div>
       <div v-else class="text-center text-muted-foreground py-4">
-        <p>You haven't joined any campaigns yet.</p>
-        <p class="text-sm">Click "Join Campaign" to get started.</p>
+        <p>Вы еще не присоединились ни к одной кампании.</p>
+        <p class="text-sm">Нажмите "Присоединиться", чтобы начать.</p>
       </div>
     </CardContent>
   </Card>

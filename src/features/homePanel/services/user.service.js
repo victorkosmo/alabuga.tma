@@ -9,5 +9,5 @@ export const getMe = async () => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Failed to fetch user profile');
+  throw new Error(response.error?.message || 'Не удалось загрузить профиль пользователя');
 };

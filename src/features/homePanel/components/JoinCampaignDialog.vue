@@ -2,27 +2,19 @@
   <Dialog :open="open" @update:open="emit('update:open', $event)">
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Join a Campaign</DialogTitle>
-        <DialogDescription>Enter the 6-digit activation code to join a new campaign.</DialogDescription>
+        <DialogTitle>Присоединиться к кампании</DialogTitle>
+        <DialogDescription>Введите 6-значный код активации, чтобы присоединиться к новой кампании.</DialogDescription>
       </DialogHeader>
       <form @submit.prevent="handleJoinCampaign" class="space-y-4 py-4">
         <div class="space-y-2">
-          <Label for="activation-code">Activation Code</Label>
-          <Input
-            id="activation-code"
-            v-model="activationCode"
-            placeholder="e.g., 123456"
-            maxlength="6"
-            required
-            pattern="\d{6}"
-            title="Activation code must be 6 digits."
-          />
+          <Label for="activation-code" class="text-center block">Код активации</Label>
+          <ActivationCodeInput id="activation-code" v-model="activationCode" />
         </div>
         <p v-if="error" class="text-sm text-destructive text-center">{{ error }}</p>
         <DialogFooter>
-          <Button type="submit" :disabled="loading" class="w-full">
-            <span v-if="loading">Joining...</span>
-            <span v-else>Join Campaign</span>
+          <Button type="submit" :disabled="loading || activationCode.length !== 6" class="w-full">
+            <span v-if="loading">Присоединяемся...</span>
+            <span v-else>Присоединиться</span>
           </Button>
         </DialogFooter>
       </form>
@@ -45,6 +37,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { successMessage } from '@/utils/toast';
+import ActivationCodeInput from './ActivationCodeInput.vue';
 
 const props = defineProps({
   open: {
@@ -65,7 +58,7 @@ const handleJoinCampaign = async () => {
 
   try {
     const newCampaign = await joinCampaign(activationCode.value);
-    successMessage(`Successfully joined campaign: ${newCampaign.name}`);
+    successMessage(`Успешно присоединились к кампании: ${newCampaign.name}`);
     emit('campaign-joined');
     emit('update:open', false); // Close dialog on success
   } catch (err) {
