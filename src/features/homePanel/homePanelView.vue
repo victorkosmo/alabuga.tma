@@ -30,7 +30,7 @@
     </div>
 
     <div v-else-if="error" class="text-center py-10 text-destructive">
-      <p>Error loading data: {{ error.message }}</p>
+      <p>Ошибка загрузки данных: {{ error.message }}</p>
     </div>
 
     <div v-else-if="user" class="space-y-6">
@@ -49,7 +49,7 @@
           </div>
           <div class="text-right">
             <div class="font-semibold text-lg">{{ user.mana_points }} MP</div>
-            <div class="text-sm text-muted-foreground">Mana</div>
+            <div class="text-sm text-muted-foreground">Мана</div>
           </div>
         </CardHeader>
       </Card>
