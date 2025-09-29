@@ -9,5 +9,5 @@ export const getAvailableStoreItems = async () => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Failed to fetch store items');
+  throw new Error(response.error?.message || 'Не удалось получить товары магазина');
 };

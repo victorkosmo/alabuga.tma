@@ -18,7 +18,7 @@
 
     <!-- Error State -->
     <div v-else-if="error" class="text-center py-10 text-destructive">
-      <p>Error loading store items: {{ error.message }}</p>
+      <p>Ошибка загрузки товаров магазина: {{ error.message }}</p>
     </div>
 
     <!-- Content -->
@@ -28,7 +28,7 @@
           <CardHeader>
             <div class="aspect-square bg-muted rounded-md flex items-center justify-center">
               <img v-if="item.image_url" :src="item.image_url" :alt="item.name" class="h-full w-full object-cover rounded-md">
-              <span v-else class="text-muted-foreground text-sm">No Image</span>
+              <span v-else class="text-muted-foreground text-sm">Нет изображения</span>
             </div>
           </CardHeader>
           <CardContent class="flex-grow space-y-1">
@@ -41,7 +41,7 @@
         </Card>
       </div>
       <div v-else class="text-center text-muted-foreground py-10">
-        <p>The store is currently empty. Check back later!</p>
+        <p>Магазин пока пуст. Загляните позже!</p>
       </div>
     </div>
   </div>
