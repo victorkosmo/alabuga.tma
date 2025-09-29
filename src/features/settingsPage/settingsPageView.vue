@@ -56,8 +56,8 @@
               <AvatarFallback>{{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}</AvatarFallback>
             </Avatar>
             <div>
-              <CardTitle class="text-2xl">@{{ user.username }}</CardTitle>
-              <CardDescription>{{ user.rank_title }}</CardDescription>
+              <CardTitle class="text-2xl">{{ user.first_name }} {{ user.last_name }}</CardTitle>
+              <CardDescription>@{{ user.username }}</CardDescription>
             </div>
           </div>
           <div class="text-right space-y-1">
