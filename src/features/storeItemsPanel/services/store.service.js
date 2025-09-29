@@ -5,7 +5,7 @@ import { get } from '@/services/apiService';
  * @returns {Promise<Array<Object>>} A list of available store items.
  */
 export const getAvailableStoreItems = async () => {
-  const response = await get('/telegram/store/available');
+  const response = await get('/store/available');
   if (response.success) {
     return response.data;
   }
