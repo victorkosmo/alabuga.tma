@@ -10,9 +10,8 @@
           <Skeleton class="h-5 w-3/4" />
           <Skeleton class="h-4 w-full" />
         </CardContent>
-        <CardFooter class="flex justify-between items-center">
+        <CardFooter>
           <Skeleton class="h-5 w-16" />
-          <Skeleton class="h-9 w-20" />
         </CardFooter>
       </Card>
     </div>
@@ -36,9 +35,8 @@
             <CardTitle class="text-base">{{ item.name }}</CardTitle>
             <CardDescription class="text-xs">{{ item.description }}</CardDescription>
           </CardContent>
-          <CardFooter class="flex justify-between items-center pt-4">
-            <span class="font-semibold text-blue-500">{{ item.price }} MP</span>
-            <Button size="sm" disabled>Purchase</Button>
+          <CardFooter class="pt-4">
+            <span class="font-semibold text-blue-500">{{ item.cost }} MP</span>
           </CardFooter>
         </Card>
       </div>
