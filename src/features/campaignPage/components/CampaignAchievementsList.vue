@@ -4,20 +4,23 @@
     <div class="flex flex-wrap gap-4">
       <Dialog v-for="achievement in achievements" :key="achievement.id">
         <DialogTrigger as-child>
-          <div class="relative cursor-pointer group">
-            <Avatar
-              :class="['h-16 w-16 border-2 transition-all', achievement.is_earned ? 'border-green-500' : 'border-transparent']"
-            >
-              <AvatarImage
-                :src="achievement.image_url"
-                :alt="achievement.name"
-                :class="['transition-all', !achievement.is_earned && 'grayscale group-hover:grayscale-0']"
-              />
-              <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
-            </Avatar>
-            <div class="absolute bottom-0 right-0 bg-background/80 rounded-full p-0.5">
-              <Info class="h-4 w-4 text-muted-foreground" />
+          <div class="flex flex-col items-center gap-1.5 w-16 text-center cursor-pointer group">
+            <div class="relative">
+              <Avatar
+                :class="['h-16 w-16 border-2 transition-all', achievement.is_earned ? 'border-green-500' : 'border-transparent']"
+              >
+                <AvatarImage
+                  :src="achievement.image_url"
+                  :alt="achievement.name"
+                  :class="['transition-all', !achievement.is_earned && 'grayscale group-hover:grayscale-0']"
+                />
+                <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
+              </Avatar>
+              <div class="absolute bottom-0 right-0 bg-background/80 rounded-full p-0.5">
+                <Info class="h-4 w-4 text-muted-foreground" />
+              </div>
             </div>
+            <span class="text-xs font-medium leading-tight">{{ achievement.name }}</span>
           </div>
         </DialogTrigger>
         <DialogContent class="max-w-[90vw] rounded-lg">
@@ -37,7 +40,10 @@
           <div class="space-y-4 py-4">
             <div v-if="achievement.mana_reward > 0">
               <h5 class="font-semibold text-sm mb-1">Награда</h5>
-              <p class="text-sm text-muted-foreground">{{ achievement.mana_reward }} MP</p>
+              <div class="flex items-center gap-1 text-sm text-muted-foreground">
+                <span>{{ achievement.mana_reward }}</span>
+                <img src="/mana.svg" alt="MP" class="h-4 w-4" />
+              </div>
             </div>
 
             <div>
