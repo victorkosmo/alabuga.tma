@@ -61,7 +61,7 @@
                 <ArrowLeft class="h-5 w-5" />
               </Button>
             </router-link>
-            <h1 class="text-3xl font-bold text-foreground drop-shadow-md">{{ campaign.name }}</h1>
+            <h1 class="text-3xl font-bold text-foreground drop-shadow-md">{{ campaign.title }}</h1>
           </div>
         </div>
       </div>
