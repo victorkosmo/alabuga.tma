@@ -1,13 +1,14 @@
 <template>
   <!-- Scenario 1: User has campaigns -->
   <div v-if="campaigns.length > 0">
-    <h2 class="text-xl font-semibold mb-4">Ваши кампании</h2>
+    <h2 class="text-xl font-semibold mb-4">Ваши события</h2>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <CampaignCard v-for="campaign in campaigns" :key="campaign.id" :campaign="campaign" />
     </div>
     <div class="mt-6 text-center">
-      <Button variant="outline" @click="isJoinDialogOpen = true">
-        Присоединиться к еще одной кампании
+      <p class="mb-2 text-muted-foreground">Хотите присоединиться к новому событию?</p>
+      <Button @click="isJoinDialogOpen = true">
+        Присоединиться по коду
       </Button>
     </div>
   </div>
@@ -18,12 +19,12 @@
       <CardHeader>
         <CardTitle class="text-2xl">Начните свое приключение!</CardTitle>
         <CardDescription class="mt-2">
-          У вас пока нет активных кампаний. Присоединяйтесь к первой, чтобы начать!
+          У вас пока нет активных событий. Присоединяйтесь к первому, чтобы начать!
         </CardDescription>
       </CardHeader>
       <CardContent class="pt-0">
         <Button size="lg" @click="isJoinDialogOpen = true">
-          Присоединиться к кампании
+          Присоединиться к событию
         </Button>
       </CardContent>
     </Card>
