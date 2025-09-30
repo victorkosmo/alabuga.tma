@@ -105,7 +105,7 @@
                     </router-link>
                   </div>
                 </div>
-                <p v-if="mission.description" class="text-sm text-muted-foreground mt-1">{{ mission.description }}</p>
+                <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
               </div>
             </div>
             <div v-else class="text-center text-muted-foreground py-4">
