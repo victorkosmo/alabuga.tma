@@ -1,7 +1,7 @@
 <template>
   <div class="p-4 md:p-6">
     <!-- Loading State -->
-    <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div v-if="loading" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       <Card v-for="i in 4" :key="i">
         <CardHeader>
           <Skeleton class="h-32 w-full rounded-md" />
@@ -23,7 +23,7 @@
 
     <!-- Content -->
     <div v-else>
-      <div v-if="storeItems.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div v-if="storeItems.length > 0" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <Card v-for="item in storeItems" :key="item.id" class="flex flex-col">
           <CardHeader>
             <div class="aspect-square bg-muted rounded-md flex items-center justify-center">
@@ -35,9 +35,10 @@
             <CardTitle class="text-base">{{ item.name }}</CardTitle>
             <CardDescription class="text-xs">{{ item.description }}</CardDescription>
           </CardContent>
-          <CardFooter class="pt-4">
+          <CardFooter class="pt-4 flex justify-between items-center">
+            <span class="text-sm text-muted-foreground">Стоимость</span>
             <div class="flex items-center gap-1">
-              <span class="font-semibold text-white">{{ item.cost }}</span>
+              <span class="font-semibold text-white text-lg">{{ item.cost }}</span>
               <img src="/mana.svg" alt="MP" class="h-5 w-5" />
             </div>
           </CardFooter>
