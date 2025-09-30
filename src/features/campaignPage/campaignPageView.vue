@@ -68,9 +68,6 @@
 
       <div class="space-y-6 p-4 md:p-6">
         <Card v-if="campaign.description || campaign.achievements?.length">
-          <CardHeader>
-            <CardTitle>Описание</CardTitle>
-          </CardHeader>
           <CardContent>
             <p v-if="campaign.description" class="text-muted-foreground">{{ campaign.description }}</p>
             <CampaignAchievementsList v-if="campaign.achievements?.length" :achievements="campaign.achievements" />

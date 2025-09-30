@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 class="font-semibold text-sm mt-6 mb-3">Достижения кампании</h4>
+    <h4 class="font-semibold text-sm mt-6 mb-3">Достижения:</h4>
     <div class="flex flex-wrap gap-4">
       <Dialog v-for="achievement in achievements" :key="achievement.id">
         <DialogTrigger as-child>
