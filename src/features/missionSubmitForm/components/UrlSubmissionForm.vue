@@ -2,6 +2,9 @@
   <Card>
     <CardHeader>
       <CardTitle>Отправить ссылку</CardTitle>
+      <CardDescription v-if="mission.details?.submission_prompt">
+        {{ mission.details.submission_prompt }}
+      </CardDescription>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="handleSubmit" class="space-y-4">
