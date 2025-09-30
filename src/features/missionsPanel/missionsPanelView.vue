@@ -48,13 +48,7 @@
           <div v-if="availableMissions.length > 0" class="space-y-4">
             <div v-for="mission in availableMissions" :key="mission.id" class="p-4 border rounded-md">
               <div class="flex justify-between items-start">
-                <div>
-                  <h3 class="font-semibold">{{ mission.title }}</h3>
-                  <p v-if="mission.description" class="text-sm text-muted-foreground mt-1">{{ mission.description }}</p>
-                  <div class="flex items-center gap-4 mt-2 text-sm">
-                    <span v-if="mission.mana_reward > 0" class="font-semibold text-blue-500">{{ mission.mana_reward }} MP</span>
-                  </div>
-                </div>
+                <h3 class="font-semibold">{{ mission.title }}</h3>
                 <div class="flex-shrink-0 ml-4">
                   <Badge v-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
                   <Badge v-else-if="mission.type === 'QR_CODE'" variant="outline">отсканируйте QR код</Badge>
@@ -63,6 +57,7 @@
                   </router-link>
                 </div>
               </div>
+              <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
             </div>
           </div>
           <div v-else class="text-center text-muted-foreground py-4">
@@ -80,13 +75,7 @@
           <div class="space-y-4">
             <div v-for="mission in lockedMissions" :key="mission.id" class="p-4 border rounded-md">
               <div class="flex justify-between items-start">
-                <div>
-                  <h3 class="font-semibold">{{ mission.title }}</h3>
-                  <p v-if="mission.description" class="text-sm text-muted-foreground mt-1">{{ mission.description }}</p>
-                  <div class="flex items-center gap-4 mt-2 text-sm">
-                    <span v-if="mission.mana_reward > 0" class="font-semibold text-blue-500">{{ mission.mana_reward }} MP</span>
-                  </div>
-                </div>
+                <h3 class="font-semibold">{{ mission.title }}</h3>
                 <div class="flex-shrink-0 ml-4">
                   <AchievementLockBadge
                     v-if="mission.required_achievement_name"
@@ -98,6 +87,7 @@
                   </Badge>
                 </div>
               </div>
+              <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
             </div>
           </div>
         </CardContent>
