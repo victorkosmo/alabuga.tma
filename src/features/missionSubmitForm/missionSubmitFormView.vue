@@ -30,6 +30,7 @@
 
       <!-- Mission Type Dispatcher -->
       <UrlSubmissionForm v-if="mission.type === 'MANUAL_URL'" :mission="mission" :campaign-id="campaignId" />
+      <QuizSubmissionForm v-else-if="mission.type === 'QUIZ'" :mission="mission" :campaign-id="campaignId" />
       <div v-else>
         <p>Этот тип миссии ({{ mission.type }}) пока не поддерживается.</p>
       </div>
@@ -42,6 +43,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { getMissionById } from './services/mission.service';
 import UrlSubmissionForm from './components/UrlSubmissionForm.vue';
+import QuizSubmissionForm from './components/QuizSubmissionForm.vue';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-vue-next';
