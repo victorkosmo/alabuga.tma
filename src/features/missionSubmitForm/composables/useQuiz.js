@@ -5,21 +5,30 @@ export function useQuiz(mission) {
   const currentQuestionIndex = ref(0);
   const selectedAnswers = ref({});
 
+  // THIS IS THE FIX: totalQuestions is now a computed property, making it reactive.
+  const totalQuestions = computed(() => questions.value.length);
+
   const currentQuestion = computed(() => {
     return questions.value[currentQuestionIndex.value];
   });
 
   const isFirstQuestion = computed(() => currentQuestionIndex.value === 0);
-  const isLastQuestion = computed(() => currentQuestionIndex.value === questions.value.length - 1);
+  
+  // This now correctly uses the reactive totalQuestions
+  const isLastQuestion = computed(() => {
+    if (totalQuestions.value === 0) return true;
+    return currentQuestionIndex.value === totalQuestions.value - 1;
+  });
 
+  // This also now correctly uses the reactive totalQuestions
   const allQuestionsAnswered = computed(() => {
-    return questions.value.length > 0 && questions.value.length === Object.keys(selectedAnswers.value).length;
+    return totalQuestions.value > 0 && totalQuestions.value === Object.keys(selectedAnswers.value).length;
   });
 
   const progress = computed(() => {
-    const totalQuestions = questions.value.length;
-    if (totalQuestions === 0) return 0;
-    return ((currentQuestionIndex.value + 1) / totalQuestions) * 100;
+    if (totalQuestions.value === 0) return 0;
+    // Use .value because totalQuestions is a computed ref
+    return ((currentQuestionIndex.value + 1) / totalQuestions.value) * 100;
   });
 
   function nextQuestion() {
@@ -56,8 +65,8 @@ export function useQuiz(mission) {
     isLastQuestion,
     allQuestionsAnswered,
     progress,
-    totalQuestions: questions.value.length,
-
+    totalQuestions, // Return the reactive computed property
+    
     // Methods
     nextQuestion,
     prevQuestion,
