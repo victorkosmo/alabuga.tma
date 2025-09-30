@@ -43,27 +43,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { getMe } from '@/features/homePanel/services/user.service';
+import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 
-const user = ref(null);
-const loading = ref(true);
-const error = ref(null);
+const userStore = useUserStore();
+const { user, loading, error } = storeToRefs(userStore);
 
-const fetchUser = async () => {
-  loading.value = true;
-  error.value = null;
-  try {
-    user.value = await getMe();
-  } catch (err) {
-    error.value = err;
-    console.error('Failed to fetch user data:', err);
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(fetchUser);
+onMounted(() => {
+  userStore.fetchUser();
+});
 </script>
