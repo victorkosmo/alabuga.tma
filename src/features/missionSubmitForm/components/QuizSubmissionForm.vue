@@ -3,7 +3,7 @@
     <CardHeader>
       <CardTitle>Квиз: {{ mission.title }}</CardTitle>
       <CardDescription v-if="mission.details.pass_threshold">
-        Для прохождения необходимо правильно ответить как минимум на {{ mission.details.pass_threshold }}% вопросов.
+        Для прохождения необходимо правильно ответить как минимум на {{ (mission.details.pass_threshold * 100).toFixed(0) }}% вопросов.
       </CardDescription>
     </CardHeader>
     <CardContent>
@@ -11,7 +11,7 @@
         <div v-for="(question, qIndex) in mission.details.questions" :key="qIndex" class="space-y-2">
           <p class="font-semibold">{{ qIndex + 1 }}. {{ question.text }}</p>
           <div class="space-y-2 pl-4">
-            <div v-for="(option, oIndex) in question.options" :key="oIndex" class="flex items-center gap-2">
+            <div v-for="(answer, oIndex) in question.answers" :key="oIndex" class="flex items-center gap-2">
               <input
                 type="radio"
                 :id="`q${qIndex}o${oIndex}`"
@@ -21,7 +21,7 @@
                 :disabled="isSubmitting"
                 class="h-4 w-4"
               />
-              <Label :for="`q${qIndex}o${oIndex}`">{{ option }}</Label>
+              <Label :for="`q${qIndex}o${oIndex}`">{{ answer.text }}</Label>
             </div>
           </div>
         </div>
