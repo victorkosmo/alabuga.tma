@@ -30,3 +30,20 @@ export const submitUrlCompletion = async (missionId, submissionUrl) => {
   }
   throw new Error(response.error?.message || 'Не удалось отправить URL');
 };
+
+/**
+ * Submits answers for a quiz mission.
+ * @param {string} missionId - The ID of the mission.
+ * @param {Array<{question_index: number, answer_index: number}>} answers - The user's answers.
+ * @returns {Promise<Object>} The quiz result.
+ */
+export const submitQuizCompletion = async (missionId, answers) => {
+  const response = await post('/completions/submit-quiz', {
+    mission_id: missionId,
+    answers: answers,
+  });
+  if (response.success) {
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Не удалось отправить ответы на квиз');
+};
