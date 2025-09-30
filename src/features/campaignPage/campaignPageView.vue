@@ -85,10 +85,6 @@
                   <div>
                     <h3 class="font-semibold">{{ mission.title }}</h3>
                     <p v-if="mission.description" class="text-sm text-muted-foreground mt-1">{{ mission.description }}</p>
-
-                    <div class="flex items-center gap-4 mt-2 text-sm">
-                      <span v-if="mission.mana_reward > 0" class="font-semibold text-blue-500">{{ mission.mana_reward }} MP</span>
-                    </div>
                   </div>
                   <div class="flex-shrink-0 ml-4">
                     <Badge v-if="mission.is_completed" variant="outline" class="flex items-center gap-1 text-green-600 border-green-600">
