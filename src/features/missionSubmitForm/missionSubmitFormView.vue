@@ -21,7 +21,6 @@
         </router-link>
         <h1 class="text-2xl font-bold">{{ mission.title }}</h1>
       </div>
-      <p v-if="mission.description" class="text-muted-foreground mb-6">{{ mission.description }}</p>
 
       <!-- Mission Type Dispatcher -->
       <UrlSubmissionForm v-if="mission.type === 'MANUAL_URL'" :mission="mission" :campaign-id="campaignId" />
