@@ -41,8 +41,8 @@
             <div v-if="achievement.mana_reward > 0">
               <h5 class="font-semibold text-sm mb-1">Награда</h5>
               <div class="flex items-center gap-1 text-sm text-muted-foreground">
-                <span>{{ achievement.mana_reward }}</span>
-                <img src="/mana.svg" alt="MP" class="h-4 w-4" />
+                <span class="text-[20px]">{{ achievement.mana_reward }}</span>
+                <img src="/mana.svg" alt="MP" class="h-7 w-7" />
               </div>
             </div>
 
