@@ -47,31 +47,6 @@
     </div>
 
     <div v-else-if="user" class="space-y-6">
-      <!-- User Profile Display -->
-      <Card>
-        <CardHeader class="flex flex-row items-center justify-between gap-4">
-          <div class="flex flex-row items-center gap-4">
-            <Avatar class="h-16 w-16">
-              <AvatarImage :src="user.avatar_url" :alt="user.username" />
-              <AvatarFallback>{{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}</AvatarFallback>
-            </Avatar>
-            <div>
-              <CardTitle class="text-2xl">{{ user.first_name }} {{ user.last_name }}</CardTitle>
-              <CardDescription>@{{ user.username }}</CardDescription>
-            </div>
-          </div>
-          <div class="text-right space-y-1">
-            <div>
-              <div class="font-semibold text-lg">{{ user.mana_points }} MP</div>
-              <div class="text-sm text-muted-foreground">Мана</div>
-            </div>
-            <div>
-              <div class="font-semibold text-lg">{{ user.experience_points }} XP</div>
-              <div class="text-sm text-muted-foreground">Опыт</div>
-            </div>
-          </div>
-        </CardHeader>
-      </Card>
 
       <!-- Edit Profile Form -->
       <form @submit.prevent="handleSave">

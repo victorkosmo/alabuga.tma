@@ -21,7 +21,7 @@
       <p>Не удалось загрузить профиль</p>
     </div>
 
-    <div v-else-if="user" class="flex flex-row items-center justify-between gap-4">
+    <div v-else-if="user" class="flex flex-row items-center justify-between gap-4 p-1">
       <div class="flex flex-row items-center gap-4 overflow-hidden">
         <Avatar class="h-12 w-12">
           <AvatarImage :src="user.avatar_url" :alt="user.username" />
@@ -34,8 +34,8 @@
       </div>
       <div class="text-right">
         <div class="flex items-center justify-end gap-1 font-semibold text-lg">
-          <span>{{ user.mana_points }}</span>
-          <img src="/mana.svg" alt="Mana" class="h-6 w-6" />
+          <span class="text-[22px]">{{ user.mana_points }}</span>
+          <img src="/mana.svg" alt="Mana" class="h-10 w-10" />
         </div>
       </div>
     </div>
