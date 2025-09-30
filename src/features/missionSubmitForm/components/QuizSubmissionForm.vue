@@ -104,7 +104,9 @@ const {
 
 const requiredAnswersToPassText = computed(() => {
   const threshold = props.mission.details.pass_threshold;
-  if (threshold > 0 && totalQuestions.value > 0) {
+  // Changed condition: Check for null/undefined instead of > 0,
+  // as a threshold of 0 is a valid scenario.
+  if (threshold != null && totalQuestions.value > 0) {
     const requiredCount = Math.ceil(threshold * totalQuestions.value);
     
     // Helper for Russian pluralization of "вопрос"
