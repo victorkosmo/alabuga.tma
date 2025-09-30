@@ -8,13 +8,16 @@
     </CardHeader>
     <CardContent>
       <form @submit.prevent="handleSubmit" class="space-y-4">
-        <div>
-          <Label for="submissionUrl" class="pb-3">Ссылка для отправки</Label>
+        <div class="space-y-2">
+          <Label for="submissionUrl">Ссылка для отправки</Label>
+          <Badge v-if="exampleUrlText" variant="secondary" class="w-fit">
+            Пример: {{ exampleUrlText }}
+          </Badge>
           <Input
             id="submissionUrl"
             v-model="submissionUrl"
             type="url"
-            :placeholder="placeholderText"
+            placeholder="твоя ссылка"
             required
             :disabled="isSubmitting"
             class="placeholder:text-xs placeholder:text-muted-foreground"
@@ -37,6 +40,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { successMessage } from '@/utils/toast';
 
 const props = defineProps({
@@ -55,15 +59,8 @@ const submissionUrl = ref('');
 const isSubmitting = ref(false);
 const error = ref(null);
 
-const placeholderText = computed(() => {
-  const providedPlaceholder = props.mission.details?.placeholder_text;
-  // If placeholder is provided (not null/undefined)
-  if (providedPlaceholder != null) {
-    // If it's a non-empty string, add prefix. Otherwise (it's an empty string), return it as is.
-    return providedPlaceholder ? `Пример ссылки: ${providedPlaceholder}` : '';
-  }
-  // If placeholder is not provided at all, use default.
-  return 'https://example.com/your-submission';
+const exampleUrlText = computed(() => {
+  return props.mission.details?.placeholder_text || null;
 });
 
 const handleSubmit = async () => {
