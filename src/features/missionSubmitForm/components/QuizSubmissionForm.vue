@@ -7,45 +7,68 @@
       </CardDescription>
     </CardHeader>
     <CardContent>
+      <div class="mb-4">
+        <Progress :model-value="progress" class="w-full" />
+        <p class="text-sm text-muted-foreground mt-2 text-center">
+          Вопрос {{ currentQuestionIndex + 1 }} из {{ totalQuestions }}
+        </p>
+      </div>
+
       <form @submit.prevent="handleSubmit" class="space-y-6">
-        <div v-for="(question, qIndex) in mission.details.questions" :key="qIndex" class="space-y-2">
-          <p class="font-semibold">{{ qIndex + 1 }}. {{ question.text }}</p>
+        <!-- Question Body -->
+        <div :key="currentQuestionIndex" class="space-y-4 min-h-[120px]">
+          <p class="font-semibold">{{ currentQuestion.text }}</p>
           <div class="space-y-2 pl-4">
-            <div v-for="(answer, oIndex) in question.answers" :key="oIndex" class="flex items-center gap-2">
+            <div v-for="(answer, oIndex) in currentQuestion.answers" :key="oIndex" class="flex items-center gap-2">
               <input
                 type="radio"
-                :id="`q${qIndex}o${oIndex}`"
-                :name="`question-${qIndex}`"
+                :id="`q${currentQuestionIndex}o${oIndex}`"
+                :name="`question-${currentQuestionIndex}`"
                 :value="oIndex"
-                @change="() => handleAnswerChange(qIndex, oIndex)"
+                :checked="selectedAnswers[currentQuestionIndex] === oIndex"
+                @change="() => handleAnswerChange(currentQuestionIndex, oIndex)"
                 :disabled="isSubmitting"
                 class="h-4 w-4"
               />
-              <Label :for="`q${qIndex}o${oIndex}`">{{ answer.text }}</Label>
+              <Label :for="`q${currentQuestionIndex}o${oIndex}`">{{ answer.text }}</Label>
             </div>
           </div>
         </div>
 
+        <!-- Errors and Results -->
         <div v-if="error" class="text-sm text-destructive">{{ error }}</div>
         <div v-if="submissionResult && !submissionResult.passed" class="text-sm text-yellow-600">
           К сожалению, вы не прошли квиз ({{ submissionResult.score.toFixed(0) }}% правильных ответов). Попробуйте еще раз!
         </div>
 
-        <Button type="submit" :disabled="isSubmitting || !allQuestionsAnswered">
-          {{ isSubmitting ? 'Отправка...' : 'Отправить ответы' }}
-        </Button>
+        <!-- Navigation and Submission -->
+        <div class="flex justify-between items-center pt-4">
+          <Button type="button" variant="outline" @click="prevQuestion" :disabled="isFirstQuestion || isSubmitting">
+            Назад
+          </Button>
+
+          <Button v-if="!isLastQuestion" type="button" @click="nextQuestion" :disabled="isSubmitting">
+            Далее
+          </Button>
+
+          <Button v-if="isLastQuestion" type="submit" :disabled="isSubmitting || !allQuestionsAnswered">
+            {{ isSubmitting ? 'Отправка...' : 'Отправить ответы' }}
+          </Button>
+        </div>
       </form>
     </CardContent>
   </Card>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { submitQuizCompletion } from '../services/mission.service';
+import { useQuiz } from '../composables/useQuiz';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { successMessage } from '@/utils/toast';
 
 const props = defineProps({
@@ -60,31 +83,42 @@ const props = defineProps({
 });
 
 const router = useRouter();
-const selectedAnswers = ref({});
 const isSubmitting = ref(false);
 const error = ref(null);
 const submissionResult = ref(null);
 
-const allQuestionsAnswered = computed(() => {
-  const questionCount = props.mission.details.questions.length;
-  return Object.keys(selectedAnswers.value).length === questionCount;
-});
+const {
+  currentQuestionIndex,
+  selectedAnswers,
+  currentQuestion,
+  isFirstQuestion,
+  isLastQuestion,
+  allQuestionsAnswered,
+  progress,
+  totalQuestions,
+  nextQuestion,
+  prevQuestion,
+  selectAnswer,
+  getPayload,
+} = useQuiz(props.mission);
 
 const handleAnswerChange = (questionIndex, answerIndex) => {
-  selectedAnswers.value[questionIndex] = answerIndex;
+  selectAnswer(questionIndex, answerIndex);
   submissionResult.value = null; // Clear previous result on new answer
   error.value = null;
 };
 
 const handleSubmit = async () => {
+  if (!allQuestionsAnswered.value) {
+    error.value = 'Пожалуйста, ответьте на все вопросы.';
+    return;
+  }
+
   isSubmitting.value = true;
   error.value = null;
   submissionResult.value = null;
 
-  const answersPayload = Object.entries(selectedAnswers.value).map(([qIndex, aIndex]) => ({
-    question_index: parseInt(qIndex, 10),
-    answer_index: aIndex,
-  }));
+  const answersPayload = getPayload();
 
   try {
     const result = await submitQuizCompletion(props.mission.id, answersPayload);
