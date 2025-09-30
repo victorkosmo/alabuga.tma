@@ -100,7 +100,10 @@
                   </div>
                 </div>
                 <div class="flex-shrink-0 ml-4">
-                  <Badge v-if="mission.is_completed" variant="secondary">Завершено</Badge>
+                  <Badge v-if="mission.is_completed" variant="outline" class="flex items-center gap-1 text-green-600 border-green-600">
+                    <CheckCircle2 class="h-4 w-4" />
+                    Завершено
+                  </Badge>
                   <template v-else-if="mission.is_locked">
                     <AchievementLockBadge
                       v-if="mission.required_achievement_name"
@@ -135,7 +138,7 @@ import { useRoute } from 'vue-router';
 import { getCampaignById, getCampaignMissions, getUserCampaignAchievements } from './services/campaign.service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowLeft, Lock } from 'lucide-vue-next';
+import { ArrowLeft, Lock, CheckCircle2 } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AchievementLockBadge from './components/AchievementLockBadge.vue';
