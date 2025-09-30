@@ -2,8 +2,8 @@
   <Card>
     <CardHeader>
       <CardTitle>Квиз: {{ mission.title }}</CardTitle>
-      <CardDescription v-if="mission.details.pass_threshold">
-        Для прохождения необходимо правильно ответить как минимум на {{ (mission.details.pass_threshold * 100).toFixed(0) }}% вопросов.
+      <CardDescription v-if="requiredAnswersToPassText">
+        {{ requiredAnswersToPassText }}
       </CardDescription>
     </CardHeader>
     <CardContent>
@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { submitQuizCompletion } from '../services/mission.service';
 import { useQuiz } from '../composables/useQuiz';
@@ -101,6 +101,32 @@ const {
   selectAnswer,
   getPayload,
 } = useQuiz(props.mission);
+
+const requiredAnswersToPassText = computed(() => {
+  const threshold = props.mission.details.pass_threshold;
+  if (threshold > 0 && totalQuestions.value > 0) {
+    const requiredCount = Math.ceil(threshold * totalQuestions.value);
+    
+    // Helper for Russian pluralization of "вопрос"
+    function getQuestionWord(count) {
+      const lastDigit = count % 10;
+      const lastTwoDigits = count % 100;
+      if (lastTwoDigits >= 11 && lastTwoDigits <= 19) {
+        return 'вопросов';
+      }
+      if (lastDigit === 1) {
+        return 'вопрос';
+      }
+      if ([2, 3, 4].includes(lastDigit)) {
+        return 'вопроса';
+      }
+      return 'вопросов';
+    }
+
+    return `Для прохождения необходимо правильно ответить как минимум на ${requiredCount} ${getQuestionWord(requiredCount)} из ${totalQuestions.value}.`;
+  }
+  return '';
+});
 
 const handleAnswerChange = (questionIndex, answerIndex) => {
   selectAnswer(questionIndex, answerIndex);
