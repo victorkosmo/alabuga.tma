@@ -112,7 +112,7 @@
                     </Badge>
                   </template>
                   <Badge v-else-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
-                  <Badge v-else-if="mission.completion_type === 'QR'" variant="outline">отсканируйте QR код</Badge>
+                  <Badge v-else-if="mission.type === 'QR_CODE'" variant="outline">отсканируйте QR код</Badge>
                   <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: campaignId, missionId: mission.id } }">
                     <Button size="sm">Начать</Button>
                   </router-link>
