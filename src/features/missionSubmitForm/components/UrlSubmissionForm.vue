@@ -1,7 +1,7 @@
 <template>
   <Card>
     <CardHeader>
-      <CardTitle>Отправить URL</CardTitle>
+      <CardTitle>Отправить ссылку</CardTitle>
       <CardDescription>
         {{ mission.details?.submission_prompt || 'Пожалуйста, укажите URL для вашей заявки. Она будет рассмотрена администратором.' }}
       </CardDescription>
@@ -9,7 +9,7 @@
     <CardContent>
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div>
-          <Label for="submissionUrl">URL для отправки</Label>
+          <Label for="submissionUrl" class="pb-3">Ссылка для отправки</Label>
           <Input
             id="submissionUrl"
             v-model="submissionUrl"
