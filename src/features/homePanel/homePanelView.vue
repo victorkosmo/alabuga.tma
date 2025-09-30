@@ -50,7 +50,7 @@
           <div class="text-right">
             <div class="flex items-center justify-end gap-1 font-semibold text-lg">
               <span>{{ user.mana_points }}</span>
-              <img src="/mana.svg" alt="Mana" class="h-5 w-5" />
+              <img src="/mana.svg" alt="Mana" class="h-10 w-10" />
             </div>
             <div class="text-sm text-muted-foreground">Мана</div>
           </div>
