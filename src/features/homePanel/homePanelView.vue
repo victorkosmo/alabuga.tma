@@ -49,8 +49,8 @@
           </div>
           <div class="text-right">
             <div class="flex items-center justify-end gap-1 font-semibold text-lg">
-              <span class="text-[24px]">{{ user.mana_points }}</span>
-              <img src="/mana.svg" alt="Mana" class="h-10 w-10" />
+              <span class="text-[26px]">{{ user.mana_points }}</span>
+              <img src="/mana.svg" alt="Mana" class="h-12 w-12" />
             </div>
           </div>
         </CardHeader>
