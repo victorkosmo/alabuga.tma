@@ -7,7 +7,7 @@
       </Button>
     </CardHeader>
     <CardContent>
-      <div v-if="campaigns.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div v-if="campaigns.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <CampaignCard v-for="campaign in campaigns" :key="campaign.id" :campaign="campaign" />
       </div>
       <div v-else class="text-center text-muted-foreground py-4">
