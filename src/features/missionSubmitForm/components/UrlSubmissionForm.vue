@@ -2,7 +2,9 @@
   <Card>
     <CardHeader>
       <CardTitle>Отправить URL</CardTitle>
-      <CardDescription>Пожалуйста, укажите URL для вашей заявки. Она будет рассмотрена администратором.</CardDescription>
+      <CardDescription>
+        {{ mission.details?.submission_prompt || 'Пожалуйста, укажите URL для вашей заявки. Она будет рассмотрена администратором.' }}
+      </CardDescription>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="handleSubmit" class="space-y-4">
@@ -12,7 +14,7 @@
             id="submissionUrl"
             v-model="submissionUrl"
             type="url"
-            placeholder="https://github.com/your-profile"
+            :placeholder="mission.details?.placeholder_text || 'https://example.com/your-submission'"
             required
             :disabled="isSubmitting"
           />
