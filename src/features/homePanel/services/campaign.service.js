@@ -9,7 +9,7 @@ export const getCampaigns = async () => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Не удалось загрузить кампании');
+  throw new Error(response.error?.message || 'Не удалось загрузить события');
 };
 
 /**
@@ -22,5 +22,5 @@ export const joinCampaign = async (activationCode) => {
   if (response.success) {
     return response.data;
   }
-  throw new Error(response.error?.message || 'Не удалось присоединиться к кампании');
+  throw new Error(response.error?.message || 'Не удалось присоединиться к событию');
 };

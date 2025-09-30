@@ -1,133 +1,119 @@
 <template>
-  <div class="p-4 md:p-6">
+  <div class="pb-6">
 
     <!-- Loading State -->
     <div v-if="loading" class="space-y-6">
-      <Card>
-        <CardHeader>
-          <Skeleton class="h-8 w-3/4" />
-          <Skeleton class="h-4 w-full mt-2" />
-          <Skeleton class="h-4 w-2/3 mt-1" />
-        </CardHeader>
-      </Card>
-
-      <!-- ADD THIS SKELETON CARD -->
-      <Card>
-        <CardHeader>
-          <Skeleton class="h-7 w-40" />
-        </CardHeader>
-        <CardContent class="flex gap-4">
-          <div v-for="i in 4" :key="i" class="flex flex-col items-center gap-2">
+      <div class="relative h-60 w-full bg-secondary">
+        <div class="relative z-10 flex h-full items-end p-4 md:p-6">
+          <div class="flex w-full items-center gap-3">
             <Skeleton class="h-10 w-10 rounded-full" />
-            <Skeleton class="h-4 w-16" />
+            <Skeleton class="h-8 w-1/2" />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <Skeleton class="h-7 w-28" />
-        </CardHeader>
-        <CardContent class="space-y-4">
-          <div v-for="i in 3" :key="i" class="p-4 border rounded-md">
-            <div class="flex justify-between items-center">
-              <Skeleton class="h-5 w-1/2" />
-              <Skeleton class="h-6 w-20" />
+      <div class="px-4 md:px-6 space-y-6">
+        <Card>
+          <CardHeader>
+            <Skeleton class="h-7 w-40" />
+          </CardHeader>
+          <CardContent class="flex gap-4">
+            <div v-for="i in 4" :key="i" class="flex flex-col items-center gap-2">
+              <Skeleton class="h-10 w-10 rounded-full" />
+              <Skeleton class="h-4 w-16" />
             </div>
-            <Skeleton class="h-4 w-full mt-2" />
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <Skeleton class="h-7 w-28" />
+          </CardHeader>
+          <CardContent class="space-y-4">
+            <div v-for="i in 3" :key="i" class="p-4 border rounded-md">
+              <div class="flex justify-between items-center">
+                <Skeleton class="h-5 w-1/2" />
+                <Skeleton class="h-6 w-20" />
+              </div>
+              <Skeleton class="h-4 w-full mt-2" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="text-center py-10 text-destructive">
+    <div v-else-if="error" class="text-center py-10 text-destructive px-4 md:px-6">
       <p>Ошибка загрузки данных кампании: {{ error.message }}</p>
     </div>
 
     <!-- Content -->
-    <div v-else-if="campaign" class="space-y-6">
-    <div class="flex w-full gap-2">
-        <router-link to="/" class="h-full items-center">
-            <Button variant="outline" size="lg" class="w-full">
-                <ArrowLeft class="mr-2 h-5 w-5" />
-                Назад
-            </Button>
-        </router-link>
-          <Card class="w-full">
-            <CardHeader>
-              <CardTitle class="text-2xl">{{ campaign.name }}</CardTitle>
-              <CardDescription v-if="campaign.description">{{ campaign.description }}</CardDescription>
-            </CardHeader>
-          </Card>
-    </div>
-
-    <!-- ADD THIS ENTIRE CARD -->
-    <Card>
-      <CardHeader>
-        <CardTitle>Ваши достижения</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div v-if="userAchievements.length > 0" class="flex flex-wrap gap-4">
-          <div v-for="achievement in userAchievements" :key="achievement.id" class="flex flex-col items-center gap-2 w-20 text-center">
-            <Avatar>
-              <AvatarImage :src="achievement.image_url" :alt="achievement.name" />
-              <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
-            </Avatar>
-            <span class="text-xs font-medium leading-tight">{{ achievement.name }}</span>
+    <div v-else-if="campaign">
+      <div
+        class="relative h-60 w-full bg-cover bg-center"
+        :style="{ backgroundImage: campaign.cover_url ? `url(${campaign.cover_url})` : 'none' }"
+      >
+        <div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+        <div class="relative z-10 flex h-full items-end p-4 md:p-6">
+          <div class="flex w-full items-center gap-3">
+            <router-link to="/">
+              <Button variant="outline" size="icon" class="h-10 w-10 rounded-full bg-background/50 backdrop-blur-sm">
+                <ArrowLeft class="h-5 w-5" />
+              </Button>
+            </router-link>
+            <h1 class="text-3xl font-bold text-foreground drop-shadow-md">{{ campaign.title }}</h1>
           </div>
         </div>
-        <div v-else class="text-center text-muted-foreground py-4">
-          <p>Пока нет достижений. Выполняйте миссии, чтобы разблокировать их!</p>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Миссии</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div v-if="missions.length > 0" class="space-y-4">
-            <div v-for="mission in missions" :key="mission.id" class="p-4 border rounded-md">
-              <div class="flex justify-between items-start">
-                <div>
+      <div class="space-y-6 p-4 md:p-6">
+        <Card v-if="campaign.description || campaign.achievements?.length">
+          <CardContent>
+            <p v-if="campaign.description" class="text-muted-foreground">{{ campaign.description }}</p>
+            <CampaignAchievementsList v-if="campaign.achievements?.length" :achievements="campaign.achievements" />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Миссии</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div v-if="missions.length > 0" class="space-y-4">
+              <div v-for="mission in missions" :key="mission.id" class="p-4 border rounded-md">
+                <div class="flex justify-between items-start">
                   <h3 class="font-semibold">{{ mission.title }}</h3>
-                  <p v-if="mission.description" class="text-sm text-muted-foreground mt-1">{{ mission.description }}</p>
-                  
-                  <div class="flex items-center gap-4 mt-2 text-sm">
-                    <span v-if="mission.mana_reward > 0" class="font-semibold text-blue-500">{{ mission.mana_reward }} MP</span>
+                  <div class="flex-shrink-0 ml-4">
+                    <Badge v-if="mission.is_completed" variant="outline" class="flex items-center gap-1 text-green-600 border-green-600">
+                      <CheckCircle2 class="h-4 w-4" />
+                      Завершено
+                    </Badge>
+                    <template v-else-if="mission.is_locked">
+                      <AchievementLockBadge
+                        v-if="mission.required_achievement_name"
+                        :achievement-name="mission.required_achievement_name"
+                      />
+                      <Badge v-else variant="destructive" class="flex items-center gap-1">
+                        <Lock class="h-3 w-3" />
+                        Заблокировано
+                      </Badge>
+                    </template>
+                    <Badge v-else-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
+                    <Badge v-else-if="mission.type === 'QR_CODE'" variant="outline">отсканируйте QR код</Badge>
+                    <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: campaignId, missionId: mission.id } }">
+                      <Button size="sm">Начать</Button>
+                    </router-link>
                   </div>
                 </div>
-                <div class="flex-shrink-0 ml-4">
-                  <Badge v-if="mission.is_completed" variant="outline" class="flex items-center gap-1 text-green-600 border-green-600">
-                    <CheckCircle2 class="h-4 w-4" />
-                    Завершено
-                  </Badge>
-                  <template v-else-if="mission.is_locked">
-                    <AchievementLockBadge
-                      v-if="mission.required_achievement_name"
-                      :achievement-name="mission.required_achievement_name"
-                    />
-                    <Badge v-else variant="destructive" class="flex items-center gap-1">
-                      <Lock class="h-3 w-3" />
-                      Заблокировано
-                    </Badge>
-                  </template>
-                  <Badge v-else-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
-                  <Badge v-else-if="mission.type === 'QR_CODE'" variant="outline">отсканируйте QR код</Badge>
-                  <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: campaignId, missionId: mission.id } }">
-                    <Button size="sm">Начать</Button>
-                  </router-link>
-                </div>
+                <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
               </div>
             </div>
-          </div>
-          <div v-else class="text-center text-muted-foreground py-4">
-            <p>Пока нет доступных миссий для этой кампании.</p>
-          </div>
-        </CardContent>
-      </Card>
+            <div v-else class="text-center text-muted-foreground py-4">
+              <p>Пока нет доступных миссий для этой кампании.</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   </div>
 </template>
@@ -135,13 +121,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { getCampaignById, getCampaignMissions, getUserCampaignAchievements } from './services/campaign.service';
+import { getCampaignById, getCampaignMissions } from './services/campaign.service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, Lock, CheckCircle2 } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AchievementLockBadge from './components/AchievementLockBadge.vue';
+import CampaignAchievementsList from './components/CampaignAchievementsList.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const route = useRoute();
@@ -149,7 +136,6 @@ const campaignId = route.params.id;
 
 const campaign = ref(null);
 const missions = ref([]);
-const userAchievements = ref([]); // Add this line
 const loading = ref(true);
 const error = ref(null);
 
@@ -157,14 +143,12 @@ const fetchData = async () => {
   loading.value = true;
   error.value = null;
   try {
-    const [campaignResult, missionsResult, achievementsResult] = await Promise.all([
+    const [campaignResult, missionsResult] = await Promise.all([
       getCampaignById(campaignId),
       getCampaignMissions(campaignId),
-      getUserCampaignAchievements(campaignId),
     ]);
     campaign.value = campaignResult;
     missions.value = missionsResult;
-    userAchievements.value = achievementsResult; // Add this line
   } catch (err) {
     error.value = err;
     console.error('Failed to fetch campaign data:', err);

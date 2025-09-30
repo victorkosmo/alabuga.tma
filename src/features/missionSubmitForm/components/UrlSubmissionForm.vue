@@ -1,20 +1,26 @@
 <template>
   <Card>
     <CardHeader>
-      <CardTitle>Отправить URL</CardTitle>
-      <CardDescription>Пожалуйста, укажите URL для вашей заявки. Она будет рассмотрена администратором.</CardDescription>
+      <CardTitle>Отправить ссылку</CardTitle>
+      <CardDescription v-if="mission.details?.submission_prompt">
+        {{ mission.details.submission_prompt }}
+      </CardDescription>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="handleSubmit" class="space-y-4">
-        <div>
-          <Label for="submissionUrl">URL для отправки</Label>
+        <div class="space-y-2">
+          <Label for="submissionUrl">Ссылка для отправки</Label>
+          <Badge v-if="exampleUrlText" variant="secondary" class="w-fit">
+            Пример: {{ exampleUrlText }}
+          </Badge>
           <Input
             id="submissionUrl"
             v-model="submissionUrl"
             type="url"
-            placeholder="https://github.com/your-profile"
+            placeholder="твоя ссылка"
             required
             :disabled="isSubmitting"
+            class="placeholder:text-xs placeholder:text-muted-foreground"
           />
         </div>
         <Button type="submit" :disabled="isSubmitting">
@@ -27,13 +33,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { submitUrlCompletion } from '../services/mission.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { successMessage } from '@/utils/toast';
 
 const props = defineProps({
@@ -51,6 +58,10 @@ const router = useRouter();
 const submissionUrl = ref('');
 const isSubmitting = ref(false);
 const error = ref(null);
+
+const exampleUrlText = computed(() => {
+  return props.mission.details?.placeholder_text || null;
+});
 
 const handleSubmit = async () => {
   isSubmitting.value = true;

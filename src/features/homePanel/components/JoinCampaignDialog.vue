@@ -2,8 +2,8 @@
   <Dialog :open="open" @update:open="emit('update:open', $event)">
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Присоединиться к кампании</DialogTitle>
-        <DialogDescription>Введите 6-значный код активации, чтобы присоединиться к новой кампании.</DialogDescription>
+        <DialogTitle>Присоединиться к событию</DialogTitle>
+        <DialogDescription>Введите 6-значный код активации, чтобы присоединиться к новому событию.</DialogDescription>
       </DialogHeader>
       <form @submit.prevent="handleJoinCampaign" class="space-y-4 py-4">
         <div class="space-y-2">
@@ -58,12 +58,12 @@ const handleJoinCampaign = async () => {
 
   try {
     const newCampaign = await joinCampaign(activationCode.value);
-    successMessage(`Успешно присоединились к кампании: ${newCampaign.name}`);
+    successMessage(`Успешно присоединились к событию: ${newCampaign.title}`);
     emit('campaign-joined');
     emit('update:open', false); // Close dialog on success
   } catch (err) {
     error.value = err.message;
-    console.error('Failed to join campaign:', err);
+    console.error('Failed to join event:', err);
   } finally {
     loading.value = false;
   }

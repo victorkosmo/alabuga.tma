@@ -1,5 +1,8 @@
 <template>
   <div class="flex flex-col h-screen bg-background">
+    <!-- User Header -->
+    <UserHeader />
+
     <!-- Main content area -->
     <main class="flex-1 overflow-y-auto pb-20">
       <router-view />
@@ -29,4 +32,5 @@
 
 <script setup>
 import { navConfig } from './navConfig.js';
+import UserHeader from './components/UserHeader.vue';
 </script>
