@@ -7,13 +7,8 @@
       </Button>
     </CardHeader>
     <CardContent>
-      <div v-if="campaigns.length > 0" class="space-y-4">
-        <router-link v-for="campaign in campaigns" :key="campaign.id" :to="`/campaign/${campaign.id}`" class="block p-4 border rounded-md bg-background hover:bg-muted transition-colors">
-          <div>
-            <h3 class="font-semibold">{{ campaign.name }}</h3>
-            <p v-if="campaign.description" class="text-sm text-muted-foreground">{{ campaign.description }}</p>
-          </div>
-        </router-link>
+      <div v-if="campaigns.length > 0" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <CampaignCard v-for="campaign in campaigns" :key="campaign.id" :campaign="campaign" />
       </div>
       <div v-else class="text-center text-muted-foreground py-4">
         <p>Вы еще не присоединились ни к одной кампании.</p>
@@ -33,6 +28,7 @@ import { ref } from 'vue';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import JoinCampaignDialog from './JoinCampaignDialog.vue';
+import CampaignCard from './CampaignCard.vue';
 
 defineProps({
   campaigns: {
