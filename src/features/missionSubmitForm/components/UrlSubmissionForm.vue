@@ -2,9 +2,6 @@
   <Card>
     <CardHeader>
       <CardTitle>Отправить ссылку</CardTitle>
-      <CardDescription>
-        {{ mission.details?.submission_prompt || 'Пожалуйста, укажите URL для вашей заявки. Она будет рассмотрена администратором.' }}
-      </CardDescription>
     </CardHeader>
     <CardContent>
       <form @submit.prevent="handleSubmit" class="space-y-4">

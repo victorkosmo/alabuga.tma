@@ -13,20 +13,15 @@
 
     <!-- Content -->
     <div v-else-if="mission">
-      <div class="flex w-full gap-2 mb-6">
-        <router-link :to="`/campaign/${campaignId}`" class="h-full items-center">
-            <Button variant="outline" size="lg" class="w-full">
-                <ArrowLeft class="mr-2 h-5 w-5" />
-                Назад
-            </Button>
+      <div class="flex items-center gap-3 mb-4">
+        <router-link :to="`/campaign/${campaignId}`">
+          <Button variant="outline" size="icon" class="h-10 w-10 rounded-full">
+            <ArrowLeft class="h-5 w-5" />
+          </Button>
         </router-link>
-        <Card class="w-full">
-          <CardHeader>
-            <CardTitle class="text-2xl">{{ mission.title }}</CardTitle>
-            <CardDescription v-if="mission.description">{{ mission.description }}</CardDescription>
-          </CardHeader>
-        </Card>
+        <h1 class="text-2xl font-bold">{{ mission.title }}</h1>
       </div>
+      <p v-if="mission.description" class="text-muted-foreground mb-6">{{ mission.description }}</p>
 
       <!-- Mission Type Dispatcher -->
       <UrlSubmissionForm v-if="mission.type === 'MANUAL_URL'" :mission="mission" :campaign-id="campaignId" />
