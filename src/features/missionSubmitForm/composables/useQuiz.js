@@ -54,6 +54,11 @@ export function useQuiz(mission) {
     }));
   }
 
+  function resetQuiz() {
+    currentQuestionIndex.value = 0;
+    selectedAnswers.value = {};
+  }
+
   return {
     // State
     currentQuestionIndex,
@@ -72,5 +77,6 @@ export function useQuiz(mission) {
     prevQuestion,
     selectAnswer,
     getPayload,
+    resetQuiz, // <-- Add this
   };
 }

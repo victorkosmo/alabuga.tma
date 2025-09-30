@@ -47,13 +47,28 @@
             Назад
           </Button>
 
+          <!-- "Next" button for all but the last question -->
           <Button v-if="!isLastQuestion" type="button" @click="nextQuestion" :disabled="isSubmitting">
             Далее
           </Button>
 
-          <Button v-if="isLastQuestion" type="submit" :disabled="isSubmitting || !allQuestionsAnswered">
-            {{ isSubmitting ? 'Отправка...' : 'Отправить ответы' }}
-          </Button>
+          <!-- On the last question, show either "Submit" or "Retry" -->
+          <div v-if="isLastQuestion">
+            <Button
+              v-if="submissionResult && !submissionResult.passed"
+              type="button"
+              @click="handleRetry"
+            >
+              Попробовать снова
+            </Button>
+            <Button
+              v-else
+              type="submit"
+              :disabled="isSubmitting || !allQuestionsAnswered"
+            >
+              {{ isSubmitting ? 'Отправка...' : 'Отправить ответы' }}
+            </Button>
+          </div>
         </div>
       </form>
     </CardContent>
@@ -100,6 +115,7 @@ const {
   prevQuestion,
   selectAnswer,
   getPayload,
+  resetQuiz,
 } = useQuiz(props.mission);
 
 const requiredAnswersToPassText = computed(() => {
@@ -133,6 +149,12 @@ const requiredAnswersToPassText = computed(() => {
 const handleAnswerChange = (questionIndex, answerIndex) => {
   selectAnswer(questionIndex, answerIndex);
   submissionResult.value = null; // Clear previous result on new answer
+  error.value = null;
+};
+
+const handleRetry = () => {
+  resetQuiz();
+  submissionResult.value = null;
   error.value = null;
 };
 
