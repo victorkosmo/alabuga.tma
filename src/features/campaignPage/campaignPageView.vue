@@ -67,32 +67,13 @@
       </div>
 
       <div class="space-y-6 p-4 md:p-6">
-        <Card v-if="campaign.description">
+        <Card v-if="campaign.description || campaign.achievements?.length">
           <CardHeader>
             <CardTitle>Описание</CardTitle>
           </CardHeader>
           <CardContent>
-            <p class="text-muted-foreground">{{ campaign.description }}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Ваши достижения</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div v-if="userAchievements.length > 0" class="flex flex-wrap gap-4">
-              <div v-for="achievement in userAchievements" :key="achievement.id" class="flex flex-col items-center gap-2 w-20 text-center">
-                <Avatar>
-                  <AvatarImage :src="achievement.image_url" :alt="achievement.name" />
-                  <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
-                </Avatar>
-                <span class="text-xs font-medium leading-tight">{{ achievement.name }}</span>
-              </div>
-            </div>
-            <div v-else class="text-center text-muted-foreground py-4">
-              <p>Пока нет достижений. Выполняйте миссии, чтобы разблокировать их!</p>
-            </div>
+            <p v-if="campaign.description" class="text-muted-foreground">{{ campaign.description }}</p>
+            <CampaignAchievementsList v-if="campaign.achievements?.length" :achievements="campaign.achievements" />
           </CardContent>
         </Card>
 
@@ -149,13 +130,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { getCampaignById, getCampaignMissions, getUserCampaignAchievements } from './services/campaign.service';
+import { getCampaignById, getCampaignMissions } from './services/campaign.service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowLeft, Lock, CheckCircle2 } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AchievementLockBadge from './components/AchievementLockBadge.vue';
+import CampaignAchievementsList from './components/CampaignAchievementsList.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const route = useRoute();
@@ -163,7 +145,6 @@ const campaignId = route.params.id;
 
 const campaign = ref(null);
 const missions = ref([]);
-const userAchievements = ref([]); // Add this line
 const loading = ref(true);
 const error = ref(null);
 
@@ -171,14 +152,12 @@ const fetchData = async () => {
   loading.value = true;
   error.value = null;
   try {
-    const [campaignResult, missionsResult, achievementsResult] = await Promise.all([
+    const [campaignResult, missionsResult] = await Promise.all([
       getCampaignById(campaignId),
       getCampaignMissions(campaignId),
-      getUserCampaignAchievements(campaignId),
     ]);
     campaign.value = campaignResult;
     missions.value = missionsResult;
-    userAchievements.value = achievementsResult; // Add this line
   } catch (err) {
     error.value = err;
     console.error('Failed to fetch campaign data:', err);
