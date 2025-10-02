@@ -14,13 +14,13 @@
 
       <div class="px-4 md:px-6 space-y-6">
         <Card>
-          <CardHeader>
-            <Skeleton class="h-7 w-40" />
-          </CardHeader>
-          <CardContent class="flex gap-4">
-            <div v-for="i in 4" :key="i" class="flex flex-col items-center gap-2">
-              <Skeleton class="h-10 w-10 rounded-full" />
-              <Skeleton class="h-4 w-16" />
+          <CardContent class="p-6">
+            <Skeleton class="h-7 w-40 mb-4" />
+            <div class="flex gap-4">
+              <div v-for="i in 4" :key="i" class="flex flex-col items-center gap-2">
+                <Skeleton class="h-10 w-10 rounded-full" />
+                <Skeleton class="h-4 w-16" />
+              </div>
             </div>
           </CardContent>
         </Card>

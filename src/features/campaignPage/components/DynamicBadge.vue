@@ -3,7 +3,7 @@
     <!-- Achievement Lock -->
     <div v-if="type === 'achievement-lock' && achievement" class="relative w-full h-full flex items-center justify-center">
       <Avatar class="h-16 w-16">
-        <AvatarImage :src="achievement.image_url" :alt="achievement.name" class="grayscale" />
+        <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" class="grayscale" />
         <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
       </Avatar>
       <div class="absolute bottom-1 right-1 rounded-full p-1 bg-background border border-red-800">

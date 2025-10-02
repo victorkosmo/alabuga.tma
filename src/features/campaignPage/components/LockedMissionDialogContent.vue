@@ -3,7 +3,7 @@
   <div class="space-y-4">
     <div class="flex items-center gap-3">
       <Avatar>
-        <AvatarImage :src="achievement.image_url" :alt="achievement.name" />
+        <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" />
         <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
       </Avatar>
       <span class="font-semibold">{{ achievement.name }}</span>

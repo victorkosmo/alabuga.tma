@@ -10,6 +10,7 @@
                 :class="['h-16 w-16 border-2 transition-all', achievement.is_earned ? 'border-green-500' : 'border-transparent']"
               >
                 <AvatarImage
+                  v-if="achievement.image_url"
                   :src="achievement.image_url"
                   :alt="achievement.name"
                   :class="['transition-all', !achievement.is_earned && 'grayscale group-hover:grayscale-0']"
@@ -27,7 +28,7 @@
           <DialogHeader>
             <DialogTitle class="flex items-center gap-3">
               <Avatar>
-                <AvatarImage :src="achievement.image_url" :alt="achievement.name" />
+                <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" />
                 <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
               </Avatar>
               {{ achievement.name }}
