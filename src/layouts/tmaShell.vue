@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-screen bg-background">
+  <div class="flex flex-col h-screen bg-background pb-safe">
     <!-- User Header -->
     <UserHeader />
 
