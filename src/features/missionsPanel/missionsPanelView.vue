@@ -59,6 +59,7 @@
             v-for="mission in lockedMissions"
             :key="mission.id"
             :mission="mission"
+            :campaign="campaignsMap[mission.campaign_id]"
             @interact="handleMissionInteract"
           />
         </div>
@@ -102,6 +103,7 @@ import {
 
 const availableMissions = ref([]);
 const lockedMissions = ref([]);
+const campaignsMap = ref({}); // Add this ref to store campaign data
 const loading = ref(true);
 const error = ref(null);
 
@@ -114,23 +116,50 @@ const {
   openMissionDialog,
 } = useMissionInteraction();
 
-const handleMissionInteract = async (mission) => {
-  try {
-    const campaign = await getCampaignById(mission.campaign_id);
-    openMissionDialog(mission, campaign);
-  } catch (err) {
-    console.error('Failed to get campaign details for dialog:', err);
-    // Optionally: show a toast error to the user
+// Update the signature and logic of handleMissionInteract
+const handleMissionInteract = async (mission, campaign) => {
+  let campaignData = campaign || campaignsMap.value[mission.campaign_id];
+
+  if (campaignData) {
+    openMissionDialog(mission, campaignData);
+  } else {
+    // Fallback to fetch if not available (e.g., for an available mission)
+    try {
+      const fetchedCampaign = await getCampaignById(mission.campaign_id);
+      // Cache it for subsequent interactions
+      campaignsMap.value = { ...campaignsMap.value, [mission.campaign_id]: fetchedCampaign };
+      openMissionDialog(mission, fetchedCampaign);
+    } catch (err) {
+      console.error('Failed to get campaign details for dialog:', err);
+      // Optionally: show a toast error to the user
+    }
   }
 };
 
+// Update fetchData to get campaign data and ensure mission state is correct
 const fetchData = async () => {
   loading.value = true;
   error.value = null;
   try {
     const result = await getAvailableMissions();
-    availableMissions.value = result.available_missions || [];
-    lockedMissions.value = result.locked_missions || [];
+    // Ensure is_locked property is correctly set
+    availableMissions.value = (result.available_missions || []).map(m => ({ ...m, is_locked: m.is_locked ?? false }));
+    lockedMissions.value = (result.locked_missions || []).map(m => ({ ...m, is_locked: true }));
+
+    // Fetch campaign data for locked missions
+    if (lockedMissions.value.length > 0) {
+      const campaignIds = [...new Set(lockedMissions.value.map(m => m.campaign_id).filter(Boolean))];
+      if (campaignIds.length > 0) {
+        const campaignPromises = campaignIds.map(id => getCampaignById(id));
+        const campaigns = await Promise.all(campaignPromises);
+
+        const newCampaignsMap = { ...campaignsMap.value };
+        campaigns.forEach(c => {
+          newCampaignsMap[c.id] = c;
+        });
+        campaignsMap.value = newCampaignsMap;
+      }
+    }
   } catch (err) {
     error.value = err;
     console.error('Failed to fetch missions:', err);
