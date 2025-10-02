@@ -89,6 +89,7 @@
         </div>
       </div>
     </div>
+  </div>
 
   <Dialog :open="isDialogOpen" @update:open="isDialogOpen = $event">
     <DialogContent class="max-w-[90vw] rounded-lg">
