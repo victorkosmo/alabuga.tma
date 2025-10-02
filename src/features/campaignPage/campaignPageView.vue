@@ -25,11 +25,9 @@
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <Skeleton class="h-7 w-28" />
-          </CardHeader>
-          <CardContent class="space-y-4">
+        <div>
+          <Skeleton class="h-7 w-28 mb-6" />
+          <div class="space-y-4">
             <div v-for="i in 3" :key="i" class="p-4 border rounded-md">
               <div class="flex justify-between items-center">
                 <Skeleton class="h-5 w-1/2" />
@@ -37,8 +35,8 @@
               </div>
               <Skeleton class="h-4 w-full mt-2" />
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -74,45 +72,41 @@
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Миссии</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div v-if="missions.length > 0" class="space-y-4">
-              <div v-for="mission in missions" :key="mission.id" class="p-4 border rounded-md">
-                <div class="flex justify-between items-start">
-                  <h3 class="font-semibold">{{ mission.title }}</h3>
-                  <div class="flex-shrink-0 ml-4">
-                    <Badge v-if="mission.is_completed" variant="outline" class="flex items-center gap-1 text-green-600 border-green-600">
-                      <CheckCircle2 class="h-4 w-4" />
-                      Завершено
+        <div>
+          <CardTitle class="mb-6">Миссии</CardTitle>
+          <div v-if="missions.length > 0" class="space-y-4">
+            <div v-for="mission in missions" :key="mission.id" class="p-4 border rounded-md">
+              <div class="flex justify-between items-start">
+                <h3 class="font-semibold">{{ mission.title }}</h3>
+                <div class="flex-shrink-0 ml-4">
+                  <Badge v-if="mission.is_completed" variant="outline" class="flex items-center gap-1 text-green-600 border-green-600">
+                    <CheckCircle2 class="h-4 w-4" />
+                    Завершено
+                  </Badge>
+                  <template v-else-if="mission.is_locked">
+                    <AchievementLockBadge
+                      v-if="mission.required_achievement_name"
+                      :achievement-name="mission.required_achievement_name"
+                    />
+                    <Badge v-else variant="destructive" class="flex items-center gap-1">
+                      <Lock class="h-3 w-3" />
+                      Заблокировано
                     </Badge>
-                    <template v-else-if="mission.is_locked">
-                      <AchievementLockBadge
-                        v-if="mission.required_achievement_name"
-                        :achievement-name="mission.required_achievement_name"
-                      />
-                      <Badge v-else variant="destructive" class="flex items-center gap-1">
-                        <Lock class="h-3 w-3" />
-                        Заблокировано
-                      </Badge>
-                    </template>
-                    <Badge v-else-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
-                    <Badge v-else-if="mission.type === 'QR_CODE'" variant="outline">отсканируйте QR код</Badge>
-                    <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: campaignId, missionId: mission.id } }">
-                      <Button size="sm">Начать</Button>
-                    </router-link>
-                  </div>
+                  </template>
+                  <Badge v-else-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
+                  <Badge v-else-if="mission.type === 'QR_CODE'" variant="outline">отсканируйте QR код</Badge>
+                  <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: campaignId, missionId: mission.id } }">
+                    <Button size="sm">Начать</Button>
+                  </router-link>
                 </div>
-                <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
               </div>
+              <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
             </div>
-            <div v-else class="text-center text-muted-foreground py-4">
-              <p>Пока нет доступных миссий для этой кампании.</p>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+          <div v-else class="text-center text-muted-foreground py-4">
+            <p>Пока нет доступных миссий для этой кампании.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
