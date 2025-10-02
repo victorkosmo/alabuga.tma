@@ -14,7 +14,7 @@
         <div
           v-for="item in navConfig"
           :key="item.name"
-          class="flex-1 h-full border-l-2 border-red-500 first:border-l-0"
+          class="flex-1 h-full border-l-1 border-zinc-700 first:border-l-0"
         >
           <router-link
             :to="item.path"
@@ -26,7 +26,7 @@
               class="flex flex-col items-center justify-center text-muted-foreground w-full h-full transition-colors duration-200 ease-in-out"
               :class="{ 'text-primary': item.path === '/' ? isExactActive : isActive }"
             >
-              <component :is="item.icon" class="h-8 w-8 mb-1" />
+              <component :is="item.icon" class="h-7 w-7 mb-1" />
               <span class="text-sm font-medium">{{ item.label }}</span>
             </a>
           </router-link>
@@ -43,12 +43,12 @@ import UserHeader from './components/UserHeader.vue';
 
 <style>
 #bottom-nav {
-  padding-bottom: 34px;
-  background-color: var(--secondary); /* Ensure background covers the new padded area */
+  padding-bottom: 12px;
+  background-color: var(--secondary);
 }
 
 #main-content {
-  /* 5rem is h-20. We add 34px for the nav padding. */
-  padding-bottom: calc(5rem + 34px);
+  /* 5rem is h-20. We add 12px for the nav padding. */
+  padding-bottom: calc(5rem + 12px);
 }
 </style>
