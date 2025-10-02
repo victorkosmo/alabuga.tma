@@ -11,28 +11,29 @@
     <!-- Bottom Navigation -->
     <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 border-t border-border">
       <div class="h-20 flex items-center">
-        <template v-for="(item, index) in navConfig" :key="item.name">
-          <!-- Separator -->
-          <div v-if="index > 0" class="h-10 w-px bg-border" />
+        <div
+          v-for="(item, index) in navConfig"
+          :key="item.name"
+          class="flex-1 h-full relative"
+        >
+          <!-- Separator: Absolutely positioned within the relative parent -->
+          <div v-if="index > 0" class="absolute left-0 top-1/2 -translate-y-1/2 h-10 w-px bg-border" />
 
-          <!-- Nav Item Wrapper -->
-          <div class="flex-1 h-full">
-            <router-link
-              :to="item.path"
-              custom
-              v-slot="{ navigate, isActive, isExactActive }"
+          <router-link
+            :to="item.path"
+            custom
+            v-slot="{ navigate, isActive, isExactActive }"
+          >
+            <a
+              @click="navigate"
+              class="flex flex-col items-center justify-center text-muted-foreground w-full h-full transition-colors duration-200 ease-in-out"
+              :class="{ 'text-primary': item.path === '/' ? isExactActive : isActive }"
             >
-              <a
-                @click="navigate"
-                class="flex flex-col items-center justify-center text-muted-foreground w-full h-full transition-colors duration-200 ease-in-out"
-                :class="{ 'text-primary': item.path === '/' ? isExactActive : isActive }"
-              >
-                <component :is="item.icon" class="h-8 w-8 mb-1" />
-                <span class="text-sm font-medium">{{ item.label }}</span>
-              </a>
-            </router-link>
-          </div>
-        </template>
+              <component :is="item.icon" class="h-8 w-8 mb-1" />
+              <span class="text-sm font-medium">{{ item.label }}</span>
+            </a>
+          </router-link>
+        </div>
       </div>
     </nav>
   </div>
