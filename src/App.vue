@@ -1,8 +1,6 @@
 <template>
   <!-- Show loading screen until initialization is attempted -->
-  <div v-if="!telegramStore.isInitialized" class="flex justify-center items-center min-h-screen bg-gray-100">
-    <h1 class="text-2xl font-bold text-gray-700">Initializing...</h1>
-  </div>
+  <AppLoader v-if="!telegramStore.isInitialized" />
   <div v-else>
     <router-view />
   </div>
@@ -10,6 +8,8 @@
 
 <script setup>
 import { useTelegramStore } from './stores/telegram';
+import AppLoader from './layouts/components/AppLoader.vue';
+
 const telegramStore = useTelegramStore();
 </script>
 
