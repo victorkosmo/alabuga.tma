@@ -39,19 +39,12 @@
       <div>
         <CardTitle class="mb-6">Доступные миссии</CardTitle>
         <div v-if="availableMissions.length > 0" class="space-y-4">
-          <div v-for="mission in availableMissions" :key="mission.id" class="p-4 border rounded-md">
-            <div class="flex justify-between items-start">
-              <h3 class="font-semibold">{{ mission.title }}</h3>
-              <div class="flex-shrink-0 ml-4">
-                <Badge v-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
-                <Badge v-else-if="mission.type === 'QR_CODE'" variant="outline">отсканируйте QR код</Badge>
-                <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: mission.campaign_id, missionId: mission.id } }">
-                  <Button size="sm">Начать</Button>
-                </router-link>
-              </div>
-            </div>
-            <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
-          </div>
+          <MissionCard
+            v-for="mission in availableMissions"
+            :key="mission.id"
+            :mission="mission"
+            @interact="handleMissionInteract"
+          />
         </div>
         <div v-else class="text-center text-muted-foreground py-4">
           <p>Сейчас нет доступных миссий. Загляните позже!</p>
@@ -62,41 +55,74 @@
       <div v-if="lockedMissions.length > 0">
         <CardTitle class="mb-6">Заблокированные миссии</CardTitle>
         <div class="space-y-4">
-          <div v-for="mission in lockedMissions" :key="mission.id" class="p-4 border rounded-md">
-            <div class="flex justify-between items-start">
-              <h3 class="font-semibold">{{ mission.title }}</h3>
-              <div class="flex-shrink-0 ml-4">
-                <AchievementLockBadge
-                  v-if="mission.required_achievement_name"
-                  :achievement-name="mission.required_achievement_name"
-                />
-                <Badge v-else variant="destructive" class="flex items-center gap-1">
-                  <Lock class="h-3 w-3" />
-                  Заблокировано
-                </Badge>
-              </div>
-            </div>
-            <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
-          </div>
+          <MissionCard
+            v-for="mission in lockedMissions"
+            :key="mission.id"
+            :mission="mission"
+            @interact="handleMissionInteract"
+          />
         </div>
       </div>
     </div>
   </div>
+
+  <Dialog :open="isDialogOpen" @update:open="isDialogOpen = $event">
+    <DialogContent class="max-w-[90vw] rounded-lg">
+      <DialogHeader>
+        <DialogTitle>{{ dialogTitle }}</DialogTitle>
+        <DialogDescription v-if="dialogDescription">
+          {{ dialogDescription }}
+        </DialogDescription>
+      </DialogHeader>
+      <component
+        v-if="dialogContentComponent"
+        :is="dialogContentComponent"
+        v-bind="dialogContentProps"
+        class="py-4"
+      />
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getAvailableMissions } from './services/mission.service';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getCampaignById } from '../campaignPage/services/campaign.service';
+import { CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Lock } from 'lucide-vue-next';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import MissionCard from '../campaignPage/components/MissionCard.vue';
+import { useMissionInteraction } from '../campaignPage/composables/useMissionInteraction';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const availableMissions = ref([]);
 const lockedMissions = ref([]);
 const loading = ref(true);
 const error = ref(null);
+
+const {
+  isDialogOpen,
+  dialogTitle,
+  dialogDescription,
+  dialogContentComponent,
+  dialogContentProps,
+  openMissionDialog,
+} = useMissionInteraction();
+
+const handleMissionInteract = async (mission) => {
+  try {
+    const campaign = await getCampaignById(mission.campaign_id);
+    openMissionDialog(mission, campaign);
+  } catch (err) {
+    console.error('Failed to get campaign details for dialog:', err);
+    // Optionally: show a toast error to the user
+  }
+};
 
 const fetchData = async () => {
   loading.value = true;

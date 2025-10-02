@@ -42,7 +42,7 @@ const props = defineProps({
   },
   campaign: {
     type: Object,
-    required: true,
+    default: null,
   },
 });
 
@@ -77,7 +77,7 @@ const wrapperProps = computed(() => {
     return {
       to: {
         name: 'Завершить миссию',
-        params: { campaignId: props.campaign.id, missionId: props.mission.id },
+        params: { campaignId: props.campaign?.id || props.mission.campaign_id, missionId: props.mission.id },
       },
     };
   }
@@ -86,7 +86,14 @@ const wrapperProps = computed(() => {
 
 const requiredAchievement = computed(() => {
   if (!props.mission.is_locked || !props.mission.required_achievement_name) return null;
-  return props.campaign.achievements?.find(a => a.name === props.mission.required_achievement_name) || null;
+  if (props.campaign?.achievements) {
+    return props.campaign.achievements.find(a => a.name === props.mission.required_achievement_name) || null;
+  }
+  // When campaign is not available, create a mock achievement object for DynamicBadge
+  return {
+    name: props.mission.required_achievement_name,
+    image_url: null,
+  };
 });
 
 const handleClick = () => {
