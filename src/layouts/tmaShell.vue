@@ -14,7 +14,7 @@
         <div
           v-for="item in navConfig"
           :key="item.name"
-          class="flex-1 h-full border-l border-border first:border-l-0"
+          class="flex-1 h-full border-l border-input first:border-l-0"
         >
           <router-link
             :to="item.path"
