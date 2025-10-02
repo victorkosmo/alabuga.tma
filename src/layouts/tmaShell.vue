@@ -9,7 +9,7 @@
     </main>
 
     <!-- Bottom Navigation -->
-    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border">
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 border-t border-border">
       <div class="h-20 flex justify-around items-center">
         <router-link
           v-for="item in navConfig"
@@ -39,17 +39,12 @@ import UserHeader from './components/UserHeader.vue';
 
 <style>
 #bottom-nav {
-  /* Fallback for older browsers */
-  padding-bottom: constant(safe-area-inset-bottom);
-  /* Modern syntax */
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: 34px;
+  background-color: var(--secondary); /* Ensure background covers the new padded area */
 }
 
 #main-content {
-  /* 5rem is the height of the nav bar's content (h-20) */
-  /* Fallback for older browsers */
-  padding-bottom: calc(5rem + constant(safe-area-inset-bottom));
-  /* Modern syntax */
-  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  /* 5rem is h-20. We add 34px for the nav padding. */
+  padding-bottom: calc(5rem + 34px);
 }
 </style>
