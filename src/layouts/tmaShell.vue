@@ -39,12 +39,12 @@ import UserHeader from './components/UserHeader.vue';
 
 <style>
 #bottom-nav {
-  padding-bottom: 34px;
+  padding-bottom: 12px;
   background-color: var(--secondary); /* Ensure background covers the new padded area */
 }
 
 #main-content {
-  /* 5rem is h-20. We add 34px for the nav padding. */
-  padding-bottom: calc(5rem + 34px);
+  /* 5rem is h-20. We add 12px for the nav padding. */
+  padding-bottom: calc(5rem + 12px);
 }
 </style>
