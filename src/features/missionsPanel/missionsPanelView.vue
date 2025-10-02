@@ -2,11 +2,9 @@
   <div class="p-4 md:p-6">
     <!-- Loading State -->
     <div v-if="loading" class="space-y-6">
-      <Card>
-        <CardHeader>
-          <Skeleton class="h-7 w-48" />
-        </CardHeader>
-        <CardContent class="space-y-4">
+      <div>
+        <Skeleton class="h-7 w-48 mb-6" />
+        <div class="space-y-4">
           <div v-for="i in 2" :key="i" class="p-4 border rounded-md">
             <div class="flex justify-between items-center">
               <Skeleton class="h-5 w-1/2" />
@@ -14,13 +12,11 @@
             </div>
             <Skeleton class="h-4 w-full mt-2" />
           </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <Skeleton class="h-7 w-40" />
-        </CardHeader>
-        <CardContent class="space-y-4">
+        </div>
+      </div>
+      <div>
+        <Skeleton class="h-7 w-40 mb-6" />
+        <div class="space-y-4">
           <div v-for="i in 1" :key="i" class="p-4 border rounded-md">
             <div class="flex justify-between items-center">
               <Skeleton class="h-5 w-1/2" />
@@ -28,8 +24,8 @@
             </div>
             <Skeleton class="h-4 w-full mt-2" />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
 
     <!-- Error State -->
@@ -40,84 +36,130 @@
     <!-- Content -->
     <div v-else class="space-y-6">
       <!-- Available Missions -->
-      <Card>
-        <CardHeader>
-          <CardTitle>Доступные миссии</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div v-if="availableMissions.length > 0" class="space-y-4">
-            <div v-for="mission in availableMissions" :key="mission.id" class="p-4 border rounded-md">
-              <div class="flex justify-between items-start">
-                <h3 class="font-semibold">{{ mission.title }}</h3>
-                <div class="flex-shrink-0 ml-4">
-                  <Badge v-if="mission.submission_status === 'PENDING_REVIEW'" variant="outline">На рассмотрении</Badge>
-                  <Badge v-else-if="mission.type === 'QR_CODE'" variant="outline">отсканируйте QR код</Badge>
-                  <router-link v-else :to="{ name: 'Завершить миссию', params: { campaignId: mission.campaign_id, missionId: mission.id } }">
-                    <Button size="sm">Начать</Button>
-                  </router-link>
-                </div>
-              </div>
-              <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
-            </div>
-          </div>
-          <div v-else class="text-center text-muted-foreground py-4">
-            <p>Сейчас нет доступных миссий. Загляните позже!</p>
-          </div>
-        </CardContent>
-      </Card>
+      <div>
+        <CardTitle class="mb-6">Доступные миссии</CardTitle>
+        <div v-if="availableMissions.length > 0" class="space-y-4">
+          <MissionCard
+            v-for="mission in availableMissions"
+            :key="mission.id"
+            :mission="mission"
+            @interact="handleMissionInteract"
+          />
+        </div>
+        <div v-else class="text-center text-muted-foreground py-4">
+          <p>Сейчас нет доступных миссий. Загляните позже!</p>
+        </div>
+      </div>
 
       <!-- Locked Missions -->
-      <Card v-if="lockedMissions.length > 0">
-        <CardHeader>
-          <CardTitle>Заблокированные миссии</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div class="space-y-4">
-            <div v-for="mission in lockedMissions" :key="mission.id" class="p-4 border rounded-md">
-              <div class="flex justify-between items-start">
-                <h3 class="font-semibold">{{ mission.title }}</h3>
-                <div class="flex-shrink-0 ml-4">
-                  <AchievementLockBadge
-                    v-if="mission.required_achievement_name"
-                    :achievement-name="mission.required_achievement_name"
-                  />
-                  <Badge v-else variant="destructive" class="flex items-center gap-1">
-                    <Lock class="h-3 w-3" />
-                    Заблокировано
-                  </Badge>
-                </div>
-              </div>
-              <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div v-if="lockedMissions.length > 0">
+        <CardTitle class="mb-6">Заблокированные миссии</CardTitle>
+        <div class="space-y-4">
+          <MissionCard
+            v-for="mission in lockedMissions"
+            :key="mission.id"
+            :mission="mission"
+            :campaign="campaignsMap[mission.campaign_id]"
+            @interact="handleMissionInteract"
+          />
+        </div>
+      </div>
     </div>
   </div>
+
+  <Dialog :open="isDialogOpen" @update:open="isDialogOpen = $event">
+    <DialogContent class="max-w-[90vw] rounded-lg">
+      <DialogHeader>
+        <DialogTitle>{{ dialogTitle }}</DialogTitle>
+        <DialogDescription v-if="dialogDescription">
+          {{ dialogDescription }}
+        </DialogDescription>
+      </DialogHeader>
+      <component
+        v-if="dialogContentComponent"
+        :is="dialogContentComponent"
+        v-bind="dialogContentProps"
+        class="py-4"
+      />
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getAvailableMissions } from './services/mission.service';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getCampaignById } from '../campaignPage/services/campaign.service';
+import { CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Lock } from 'lucide-vue-next';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import AchievementLockBadge from '@/features/campaignPage/components/AchievementLockBadge.vue';
+import MissionCard from '../campaignPage/components/MissionCard.vue';
+import { useMissionInteraction } from '../campaignPage/composables/useMissionInteraction';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const availableMissions = ref([]);
 const lockedMissions = ref([]);
+const campaignsMap = ref({}); // Add this ref to store campaign data
 const loading = ref(true);
 const error = ref(null);
 
+const {
+  isDialogOpen,
+  dialogTitle,
+  dialogDescription,
+  dialogContentComponent,
+  dialogContentProps,
+  openMissionDialog,
+} = useMissionInteraction();
+
+// Update the signature and logic of handleMissionInteract
+const handleMissionInteract = async (mission, campaign) => {
+  let campaignData = campaign || campaignsMap.value[mission.campaign_id];
+
+  if (campaignData) {
+    openMissionDialog(mission, campaignData);
+  } else {
+    // Fallback to fetch if not available (e.g., for an available mission)
+    try {
+      const fetchedCampaign = await getCampaignById(mission.campaign_id);
+      // Cache it for subsequent interactions
+      campaignsMap.value = { ...campaignsMap.value, [mission.campaign_id]: fetchedCampaign };
+      openMissionDialog(mission, fetchedCampaign);
+    } catch (err) {
+      console.error('Failed to get campaign details for dialog:', err);
+      // Optionally: show a toast error to the user
+    }
+  }
+};
+
+// Update fetchData to get campaign data and ensure mission state is correct
 const fetchData = async () => {
   loading.value = true;
   error.value = null;
   try {
     const result = await getAvailableMissions();
-    availableMissions.value = result.available_missions || [];
-    lockedMissions.value = result.locked_missions || [];
+    // Ensure is_locked property is correctly set
+    availableMissions.value = (result.available_missions || []).map(m => ({ ...m, is_locked: m.is_locked ?? false }));
+    lockedMissions.value = (result.locked_missions || []).map(m => ({ ...m, is_locked: true }));
+
+    // Fetch campaign data for locked missions
+    if (lockedMissions.value.length > 0) {
+      const campaignIds = [...new Set(lockedMissions.value.map(m => m.campaign_id).filter(Boolean))];
+      if (campaignIds.length > 0) {
+        const campaignPromises = campaignIds.map(id => getCampaignById(id));
+        const campaigns = await Promise.all(campaignPromises);
+
+        const newCampaignsMap = { ...campaignsMap.value };
+        campaigns.forEach(c => {
+          newCampaignsMap[c.id] = c;
+        });
+        campaignsMap.value = newCampaignsMap;
+      }
+    }
   } catch (err) {
     error.value = err;
     console.error('Failed to fetch missions:', err);

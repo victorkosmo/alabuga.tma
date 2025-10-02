@@ -33,13 +33,13 @@
           </CardHeader>
           <CardContent class="flex-grow space-y-1">
             <CardTitle class="text-base">{{ item.name }}</CardTitle>
-            <CardDescription class="text-xs">{{ item.description }}</CardDescription>
+            <CardDescription class="text">{{ item.description }}</CardDescription>
           </CardContent>
           <CardFooter class="pt-4 flex justify-between items-center">
             <span class="text-sm text-muted-foreground">Стоимость</span>
             <div class="flex items-center gap-1">
-              <span class="font-semibold text-white text-lg">{{ item.cost }}</span>
-              <img src="/mana.svg" alt="MP" class="h-5 w-5" />
+              <span class="font-semibold text-white text-xl">{{ item.cost }}</span>
+              <img src="/mana.svg" alt="MP" class="h-7 w-7" />
             </div>
           </CardFooter>
         </Card>

@@ -12,10 +12,8 @@
       </div>
     </div>
     <div class="p-4">
-      <h3 class="font-semibold truncate text-lg">{{ campaign.title }}</h3>
-      <div class="h-10">
-        <p v-if="campaign.description" class="text-sm text-muted-foreground line-clamp-2">{{ campaign.description }}</p>
-      </div>
+      <h3 class="font-semibold text-lg">{{ campaign.title }}</h3>
+      <p v-if="campaign.description" class="text-sm text-muted-foreground mt-2">{{ campaign.description }}</p>
     </div>
   </router-link>
 </template>

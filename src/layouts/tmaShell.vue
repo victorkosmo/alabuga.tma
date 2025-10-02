@@ -4,28 +4,34 @@
     <UserHeader />
 
     <!-- Main content area -->
-    <main class="flex-1 overflow-y-auto pb-20">
+    <main id="main-content" class="flex-1 overflow-y-auto">
       <router-view />
     </main>
 
     <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border h-16 flex justify-around items-center">
-      <router-link
-        v-for="item in navConfig"
-        :key="item.name"
-        :to="item.path"
-        custom
-        v-slot="{ navigate, isActive, isExactActive }"
-      >
-        <a
-          @click="navigate"
-          class="flex flex-col items-center justify-center text-muted-foreground w-full h-full transition-colors duration-200 ease-in-out"
-          :class="{ 'text-primary': item.path === '/' ? isExactActive : isActive }"
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 border-t border-border">
+      <div class="h-20 flex items-center">
+        <div
+          v-for="item in navConfig"
+          :key="item.name"
+          class="flex-1 h-full border-l-1 border-zinc-700 first:border-l-0"
         >
-          <component :is="item.icon" class="h-6 w-6 mb-1" />
-          <span class="text-xs font-medium">{{ item.label }}</span>
-        </a>
-      </router-link>
+          <router-link
+            :to="item.path"
+            custom
+            v-slot="{ navigate, isActive, isExactActive }"
+          >
+            <a
+              @click="navigate"
+              class="flex flex-col items-center justify-center text-muted-foreground w-full h-full transition-colors duration-200 ease-in-out"
+              :class="{ 'text-primary': item.path === '/' ? isExactActive : isActive }"
+            >
+              <component :is="item.icon" class="h-7 w-7 mb-1" />
+              <span class="text-sm font-medium">{{ item.label }}</span>
+            </a>
+          </router-link>
+        </div>
+      </div>
     </nav>
   </div>
 </template>
@@ -34,3 +40,15 @@
 import { navConfig } from './navConfig.js';
 import UserHeader from './components/UserHeader.vue';
 </script>
+
+<style>
+#bottom-nav {
+  padding-bottom: 12px;
+  background-color: var(--secondary);
+}
+
+#main-content {
+  /* 5rem is h-20. We add 12px for the nav padding. */
+  padding-bottom: calc(5rem + 12px);
+}
+</style>
