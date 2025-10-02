@@ -24,7 +24,7 @@
     <div v-else-if="user" class="flex flex-row items-center justify-between gap-4 p-1">
       <div class="flex flex-row items-center gap-4 overflow-hidden">
         <Avatar class="h-12 w-12">
-          <AvatarImage :src="user.avatar_url" :alt="user.username" />
+          <AvatarImage :src="user.avatar_url || undefined" :alt="user.username" />
           <AvatarFallback>{{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}</AvatarFallback>
         </Avatar>
         <div class="overflow-hidden">
