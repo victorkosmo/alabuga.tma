@@ -5,7 +5,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <CampaignCard v-for="campaign in campaigns" :key="campaign.id" :campaign="campaign" />
     </div>
-    <div class="mt-6 text-center">
+    <div class="mt-6 text-center pb-10">
       <p class="mb-2 text-muted-foreground">Хотите присоединиться к новому событию?</p>
       <Button @click="isJoinDialogOpen = true">
         Присоединиться по коду
