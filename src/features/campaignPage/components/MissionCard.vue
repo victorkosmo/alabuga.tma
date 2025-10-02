@@ -7,7 +7,7 @@
   >
     <div>
       <!-- Header: Title and Action -->
-      <div class="flex justify-between items-start gap-4">
+      <div class="flex justify-between items-end gap-4">
         <h3 class="font-semibold flex-1 min-w-0">{{ mission.title }}</h3>
 
         <div class="flex-shrink-0 w-24 flex items-center justify-center">

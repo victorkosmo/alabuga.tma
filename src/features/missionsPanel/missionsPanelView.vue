@@ -92,7 +92,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Lock } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import AchievementLockBadge from '@/features/campaignPage/components/AchievementLockBadge.vue';
 
 const availableMissions = ref([]);
 const lockedMissions = ref([]);
