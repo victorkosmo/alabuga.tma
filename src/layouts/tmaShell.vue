@@ -12,13 +12,10 @@
     <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 border-t border-border">
       <div class="h-20 flex items-center">
         <div
-          v-for="(item, index) in navConfig"
+          v-for="item in navConfig"
           :key="item.name"
-          class="flex-1 h-full relative"
+          class="flex-1 h-full border-l border-border first:border-l-0"
         >
-          <!-- Separator: Absolutely positioned within the relative parent -->
-          <div v-if="index > 0" class="absolute left-0 top-1/2 -translate-y-1/2 h-10 w-px bg-border" />
-
           <router-link
             :to="item.path"
             custom
