@@ -1,6 +1,7 @@
 // src/features/campaignPage/composables/useMissionInteraction.js
 import { ref, shallowRef } from 'vue';
 import LockedMissionDialogContent from '../components/LockedMissionDialogContent.vue';
+import QrMissionDialogContent from '../components/QrMissionDialogContent.vue';
 
 export function useMissionInteraction() {
   const isDialogOpen = ref(false);
@@ -19,6 +20,8 @@ export function useMissionInteraction() {
     } else if (mission.type === 'QR_CODE' && !mission.is_completed && !mission.is_locked) {
       dialogTitle.value = 'Найдите и отсканируйте QR код';
       dialogDescription.value = mission.description;
+      dialogContentComponent.value = QrMissionDialogContent;
+      dialogContentProps.value = {};
     } else if (mission.is_locked) {
       const achievement = campaign.achievements?.find(a => a.name === mission.required_achievement_name);
       dialogTitle.value = 'Для открытия миссии необходимо достижение';
