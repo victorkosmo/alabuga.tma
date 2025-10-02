@@ -1,5 +1,5 @@
 <template>
-  <header class="p-4 bg-background border-b border-border">
+  <header class="bg-background border-b border-border px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))]">
     <div v-if="loading">
       <!-- User Profile Card Skeleton -->
       <div class="flex flex-row items-center justify-between gap-4">
