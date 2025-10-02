@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-background border-b border-border px-4 pb-4 pt-[calc(1rem+env(safe-area-inset-top))]">
+  <header id="user-header" class="bg-background border-b border-border">
     <div v-if="loading">
       <!-- User Profile Card Skeleton -->
       <div class="flex flex-row items-center justify-between gap-4">
@@ -56,3 +56,15 @@ onMounted(() => {
   userStore.fetchUser();
 });
 </script>
+
+<style>
+#user-header {
+  padding-left: 1rem; /* Replaces px-4 */
+  padding-right: 1rem; /* Replaces px-4 */
+  padding-bottom: 1rem; /* Replaces pb-4 */
+  /* Fallback for older browsers */
+  padding-top: calc(1rem + constant(safe-area-inset-top));
+  /* Modern syntax */
+  padding-top: calc(1rem + env(safe-area-inset-top));
+}
+</style>

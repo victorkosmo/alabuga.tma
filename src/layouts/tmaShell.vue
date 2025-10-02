@@ -4,12 +4,12 @@
     <UserHeader />
 
     <!-- Main content area -->
-    <main class="flex-1 overflow-y-auto pb-[calc(5rem+env(safe-area-inset-bottom))]">
+    <main id="main-content" class="flex-1 overflow-y-auto">
       <router-view />
     </main>
 
     <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border pb-[env(safe-area-inset-bottom)]">
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border">
       <div class="h-20 flex justify-around items-center">
         <router-link
           v-for="item in navConfig"
@@ -36,3 +36,20 @@
 import { navConfig } from './navConfig.js';
 import UserHeader from './components/UserHeader.vue';
 </script>
+
+<style>
+#bottom-nav {
+  /* Fallback for older browsers */
+  padding-bottom: constant(safe-area-inset-bottom);
+  /* Modern syntax */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+#main-content {
+  /* 5rem is the height of the nav bar's content (h-20) */
+  /* Fallback for older browsers */
+  padding-bottom: calc(5rem + constant(safe-area-inset-bottom));
+  /* Modern syntax */
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+}
+</style>
