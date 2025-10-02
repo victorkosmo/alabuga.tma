@@ -1,15 +1,15 @@
 <template>
-  <div class="flex flex-col h-screen bg-background pb-safe">
+  <div class="flex flex-col h-screen bg-background">
     <!-- User Header -->
     <UserHeader />
 
     <!-- Main content area -->
-    <main class="flex-1 overflow-y-auto pb-24">
+    <main class="flex-1 overflow-y-auto pb-[calc(5rem+env(safe-area-inset-bottom))]">
       <router-view />
     </main>
 
     <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border pb-safe">
+    <nav class="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border pb-[env(safe-area-inset-bottom)]">
       <div class="h-20 flex justify-around items-center">
         <router-link
           v-for="item in navConfig"
