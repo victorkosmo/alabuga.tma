@@ -14,7 +14,7 @@
         <div
           v-for="item in navConfig"
           :key="item.name"
-          class="flex-1 h-full border-l border-input first:border-l-0"
+          class="flex-1 h-full border-l-2 border-red-500 first:border-l-0"
         >
           <router-link
             :to="item.path"
@@ -43,12 +43,12 @@ import UserHeader from './components/UserHeader.vue';
 
 <style>
 #bottom-nav {
-  padding-bottom: 12px;
+  padding-bottom: 34px;
   background-color: var(--secondary); /* Ensure background covers the new padded area */
 }
 
 #main-content {
-  /* 5rem is h-20. We add 12px for the nav padding. */
-  padding-bottom: calc(5rem + 12px);
+  /* 5rem is h-20. We add 34px for the nav padding. */
+  padding-bottom: calc(5rem + 34px);
 }
 </style>
