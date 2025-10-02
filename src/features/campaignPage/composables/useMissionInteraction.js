@@ -18,7 +18,7 @@ export function useMissionInteraction() {
       dialogTitle.value = 'Миссия на рассмотрении';
       dialogDescription.value = 'Модератор скоро проверит ваше выполнение, и вы получите уведомление.';
     } else if (mission.type === 'QR_CODE' && !mission.is_completed && !mission.is_locked) {
-      dialogTitle.value = 'Найдите и отсканируйте QR код';
+      dialogTitle.value = 'Отсканируйте QR код';
       dialogDescription.value = mission.description;
       dialogContentComponent.value = QrMissionDialogContent;
       dialogContentProps.value = {};
