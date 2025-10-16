@@ -169,7 +169,11 @@ const fetchData = async () => {
         title: group.campaign_title,
         cover_url: group.campaign_cover_url,
       };
-      allActiveMissions.push(...group.missions);
+      const missionsWithCampaignId = group.missions.map(mission => ({
+        ...mission,
+        campaign_id: group.campaign_id,
+      }));
+      allActiveMissions.push(...missionsWithCampaignId);
     });
 
     // Process completed missions
@@ -181,7 +185,11 @@ const fetchData = async () => {
           cover_url: group.campaign_cover_url,
         };
       }
-      allCompletedMissions.push(...group.missions);
+      const missionsWithCampaignId = group.missions.map(mission => ({
+        ...mission,
+        campaign_id: group.campaign_id,
+      }));
+      allCompletedMissions.push(...missionsWithCampaignId);
     });
 
     activeMissions.value = allActiveMissions;
