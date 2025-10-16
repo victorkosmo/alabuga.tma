@@ -26,11 +26,8 @@
         </div>
 
         <div class="flex-shrink-0 w-24 flex items-center justify-center">
-          <Button v-if="isStartable" class="w-full" size="sm">
-            Начать
-          </Button>
           <DynamicBadge
-            v-else
+            v-if="badgeType"
             :type="badgeType"
             :achievement="requiredAchievement"
             class="w-24 h-24"
@@ -74,7 +71,6 @@ const isStartable = computed(() => {
 const badgeType = computed(() => {
   if (props.mission.is_completed) return 'completed';
   if (props.mission.submission_status === 'PENDING_REVIEW') return 'pending-review';
-  if (props.mission.type === 'QR_CODE' && !props.mission.is_completed && !props.mission.is_locked) return 'scan-qr';
   if (props.mission.is_locked && requiredAchievement.value) return 'achievement-lock';
   if (props.mission.is_locked) return 'locked';
   return ''; // Fallback

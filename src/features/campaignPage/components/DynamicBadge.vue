@@ -23,12 +23,6 @@
       <span>На проверке</span>
     </div>
 
-    <!-- Scan QR -->
-    <div v-else-if="type === 'scan-qr'" class="flex flex-col items-center justify-center gap-2 text-muted-foreground bg-zinc-900 p-2 rounded-lg">
-      <QrCode class="h-8 w-8" />
-      <span>Сканировать</span>
-    </div>
-
     <!-- Generic Lock -->
     <div v-else-if="type === 'locked'" class="flex flex-col items-center justify-center gap-2 text-destructive">
       <Lock class="h-8 w-8" />
@@ -39,13 +33,13 @@
 
 <script setup>
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Lock, CheckCircle2, Clock, QrCode } from 'lucide-vue-next';
+import { Lock, CheckCircle2, Clock } from 'lucide-vue-next';
 
 defineProps({
   type: {
     type: String,
     required: true,
-    validator: (value) => ['completed', 'pending-review', 'scan-qr', 'achievement-lock', 'locked'].includes(value),
+    validator: (value) => ['completed', 'pending-review', 'achievement-lock', 'locked'].includes(value),
   },
   achievement: {
     type: Object,
