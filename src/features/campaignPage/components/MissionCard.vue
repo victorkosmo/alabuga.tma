@@ -2,10 +2,16 @@
   <component
     :is="wrapperComponent"
     v-bind="wrapperProps"
-    :class="['p-4 border rounded-md block', !mission.is_completed ? 'cursor-pointer' : 'cursor-default']"
+    :class="['border rounded-md block overflow-hidden', !mission.is_completed ? 'cursor-pointer' : 'cursor-default']"
     @click="handleClick"
   >
-    <div>
+    <img
+      v-if="mission.cover_url"
+      :src="mission.cover_url"
+      :alt="mission.title"
+      class="w-full h-32 object-cover"
+    />
+    <div class="p-4">
       <!-- Header: Title and Action -->
       <div class="flex justify-between items-end gap-4">
         <h3 class="font-semibold flex-1 min-w-0">{{ mission.title }}</h3>
