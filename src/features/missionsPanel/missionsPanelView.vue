@@ -46,36 +46,17 @@
         </TabsList>
 
         <TabsContent value="available" class="mt-6">
-          <div class="space-y-6">
-            <!-- Available Missions -->
-            <div>
-              <CardTitle class="mb-6">Доступные миссии</CardTitle>
-              <div v-if="availableMissions.length > 0" class="space-y-4">
-                <MissionCard
-                  v-for="mission in availableMissions"
-                  :key="mission.id"
-                  :mission="mission"
-                  @interact="handleMissionInteract"
-                />
-              </div>
-              <div v-else class="text-center text-muted-foreground py-4">
-                <p>Сейчас нет доступных миссий. Загляните позже!</p>
-              </div>
-            </div>
-
-            <!-- Locked Missions -->
-            <div v-if="lockedMissions.length > 0">
-              <CardTitle class="mb-6">Заблокированные миссии</CardTitle>
-              <div class="space-y-4">
-                <MissionCard
-                  v-for="mission in lockedMissions"
-                  :key="mission.id"
-                  :mission="mission"
-                  :campaign="campaignsMap[mission.campaign_id]"
-                  @interact="handleMissionInteract"
-                />
-              </div>
-            </div>
+          <div v-if="activeMissions.length > 0" class="space-y-4">
+            <MissionCard
+              v-for="mission in activeMissions"
+              :key="mission.id"
+              :mission="mission"
+              :campaign="campaignsMap[mission.campaign_id]"
+              @interact="handleMissionInteract"
+            />
+          </div>
+          <div v-else class="text-center text-muted-foreground py-4">
+            <p>Сейчас нет доступных миссий. Загляните позже!</p>
           </div>
         </TabsContent>
 
@@ -115,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { getAvailableMissions, getCompletedMissions } from './services/mission.service';
 import { getCampaignById } from '../campaignPage/services/campaign.service';
 import { CardTitle } from '@/components/ui/card';
@@ -146,6 +127,10 @@ const {
   dialogContentProps,
   openMissionDialog,
 } = useMissionInteraction();
+
+const activeMissions = computed(() => {
+  return [...availableMissions.value, ...lockedMissions.value];
+});
 
 // Update the signature and logic of handleMissionInteract
 const handleMissionInteract = async (mission, campaign) => {
