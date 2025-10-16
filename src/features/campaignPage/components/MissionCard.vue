@@ -17,8 +17,13 @@
     </div>
     <div class="p-4">
       <!-- Header: Title and Action -->
-      <div class="flex justify-between items-end gap-4">
-        <h3 class="font-semibold flex-1 min-w-0">{{ mission.title }}</h3>
+      <div class="flex justify-between items-start gap-4">
+        <div class="flex-1 min-w-0">
+          <p v-if="mission.campaign_title" class="inline-block rounded-md border bg-secondary text-secondary-foreground px-2 py-0.5 text-xs font-medium mb-2 truncate">
+            {{ mission.campaign_title }}
+          </p>
+          <h3 class="font-semibold leading-tight">{{ mission.title }}</h3>
+        </div>
 
         <div class="flex-shrink-0 w-24 flex items-center justify-center">
           <Button v-if="isStartable" class="w-full" size="sm">
