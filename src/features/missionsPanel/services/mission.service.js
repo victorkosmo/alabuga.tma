@@ -11,3 +11,15 @@ export const getAvailableMissions = async () => {
   }
   throw new Error(response.error?.message || 'Не удалось получить доступные миссии');
 };
+
+/**
+ * Fetches all completed missions for the current user.
+ * @returns {Promise<Array<Object>>} A list of completed missions.
+ */
+export const getCompletedMissions = async () => {
+  const response = await get('/missions/completed');
+  if (response.success) {
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Не удалось получить завершенные миссии');
+};
