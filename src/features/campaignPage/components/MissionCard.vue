@@ -37,6 +37,11 @@
 
       <!-- Description: Full width -->
       <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
+
+      <!-- Completion Stats -->
+      <div v-if="mission.completion_stats" class="pt-3">
+        <MissionCompletionStats :stats="mission.completion_stats" />
+      </div>
     </div>
   </component>
 </template>
@@ -46,6 +51,7 @@ import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { Button } from '@/components/ui/button';
 import DynamicBadge from './DynamicBadge.vue';
+import MissionCompletionStats from './MissionCompletionStats.vue';
 import { Lock } from 'lucide-vue-next';
 
 const props = defineProps({
