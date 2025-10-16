@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { getMe, updateMe } from '@/features/homePanel/services/user.service';
+import { getMe, updateMe } from '@/features/settingsPage/services/user.service';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref(null);
