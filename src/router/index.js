@@ -9,16 +9,17 @@ import missionSubmitForm from '@/features/missionSubmitForm/missionSubmitFormVie
 import missionsPanelView from '@/features/missionsPanel/missionsPanelView.vue';
 import storeItemsPanelView from '@/features/storeItemsPanel/storeItemsPanelView.vue';
 import settingsPageView from '@/features/settingsPage/settingsPageView.vue';
+import progressPanelView from '@/features/progressPanel/progressPanelView.vue';
 
 const routes = [
     {
         path: '/',
         component: TmaShell,
         children: [
-            { path: '', name: 'home', component: Home },
-            { path: 'missions', name: 'missions', component: missionsPanelView },
+            { path: '', name: 'missions', component: missionsPanelView },
+            { path: 'progress', name : 'progress', component: progressPanelView},
             { path: 'store', name: 'store', component: storeItemsPanelView },
-            { path: 'settings', name: 'settings', component: settingsPageView},
+            { path: 'events', name: 'events', component: Home },
             { path: '/campaign/:id', name: 'Campaign', component: CampaignPage }
         ]
     },

@@ -1,4 +1,4 @@
-import { Rocket, Settings, Crosshair, Vault } from 'lucide-vue-next';
+import { Orbit, Rocket, Crosshair, Vault } from 'lucide-vue-next';
 
 /**
  * @typedef {Object} NavItem
@@ -14,16 +14,16 @@ import { Rocket, Settings, Crosshair, Vault } from 'lucide-vue-next';
  */
 export const navConfig = [
   {
-    name: 'home',
-    path: '/',
-    label: 'События',
-    icon: Rocket,
-  },
-  {
     name: 'missions',
-    path: '/missions',
+    path: '/',
     label: 'Миссии',
     icon: Crosshair,
+  },
+  {
+    name: 'progress',
+    path: '/progress',
+    label: 'Прогресс',
+    icon: Rocket,
   },
   {
     name: 'store',
@@ -32,9 +32,9 @@ export const navConfig = [
     icon: Vault,
   },
   {
-    name: 'setings',
-    path: '/settings',
-    label: 'Профиль',
-    icon: Settings,
+    name: 'events',
+    path: '/events',
+    label: 'События',
+    icon: Orbit,
   },
 ];
