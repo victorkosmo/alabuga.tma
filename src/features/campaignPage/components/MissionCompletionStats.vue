@@ -6,21 +6,22 @@
     <div v-else-if="stats.total_completions === 1">
       Миссию завершил 1 чел.
     </div>
-    <div v-else class="flex items-center">
+    <div v-else class="flex items-center gap-2">
+      <span>Миссию завершили:</span>
       <div class="flex -space-x-2">
         <Avatar
           v-for="user in visibleUsers"
           :key="user.id"
-          class="h-6 w-6 border-2 border-background"
+          class="h-8 w-8 border-2 border-background"
         >
           <AvatarImage v-if="user.avatar_url" :src="user.avatar_url" :alt="user.first_name || ''" />
-          <AvatarFallback :style="{ backgroundColor: user.color }">
+          <AvatarFallback :style="{ backgroundColor: user.color }" class="text-white">
             {{ getInitials(user) }}
           </AvatarFallback>
         </Avatar>
       </div>
-      <span class="ml-2 font-medium text-foreground">
-        +{{ formatNumber(stats.total_completions) }}
+      <span v-if="stats.total_completions > 5" class="font-medium text-foreground">
+        +{{ formatNumber(stats.total_completions - 5) }}
       </span>
     </div>
   </div>
@@ -40,9 +41,12 @@ const props = defineProps({
 
 // A small palette of colors for fallbacks
 const colors = [
-  '#ef4444', '#f97316', '#eab308', '#84cc16', '#22c55e',
-  '#10b981', '#14b8a6', '#06b6d4', '#3b82f6', '#6366f1',
-  '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e'
+  '#b91c1c', // red-700
+  '#c2410c', // orange-700
+  '#1d4ed8', // blue-700
+  '#15803d', // green-700
+  '#7e22ce', // purple-700
+  '#be185d', // pink-700
 ];
 
 function getDeterministicColor(id) {
