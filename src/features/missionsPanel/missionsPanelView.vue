@@ -46,14 +46,19 @@
         </TabsList>
 
         <TabsContent value="available" class="mt-6">
-          <div v-if="activeMissions.length > 0" class="space-y-4">
-            <MissionCard
-              v-for="mission in activeMissions"
-              :key="mission.id"
-              :mission="mission"
-              :campaign="campaignsMap[mission.campaign_id]"
-              @interact="handleMissionInteract"
-            />
+          <div v-if="activeMissions.length > 0" class="space-y-6">
+            <div v-for="campaignGroup in activeMissions" :key="campaignGroup.campaign_id">
+              <h2 class="text-lg font-semibold mb-4">{{ campaignGroup.campaign_title }}</h2>
+              <div class="space-y-4">
+                <MissionCard
+                  v-for="mission in campaignGroup.missions"
+                  :key="mission.id"
+                  :mission="mission"
+                  :campaign="campaignsMap[mission.campaign_id]"
+                  @interact="handleMissionInteract"
+                />
+              </div>
+            </div>
           </div>
           <div v-else class="text-center text-muted-foreground py-4">
             <p>Сейчас нет доступных миссий. Загляните позже!</p>
@@ -159,11 +164,9 @@ const fetchData = async () => {
     ]);
 
     const newCampaignsMap = {};
-    const allActiveMissions = [];
     const allCompletedMissions = [];
 
-    // Process available/locked missions
-    (availableResult || []).forEach(group => {
+    const processedAvailableResult = (availableResult || []).map(group => {
       newCampaignsMap[group.campaign_id] = {
         id: group.campaign_id,
         title: group.campaign_title,
@@ -173,7 +176,7 @@ const fetchData = async () => {
         ...mission,
         campaign_id: group.campaign_id,
       }));
-      allActiveMissions.push(...missionsWithCampaignId);
+      return { ...group, missions: missionsWithCampaignId };
     });
 
     // Process completed missions
@@ -192,7 +195,7 @@ const fetchData = async () => {
       allCompletedMissions.push(...missionsWithCampaignId);
     });
 
-    activeMissions.value = allActiveMissions;
+    activeMissions.value = processedAvailableResult;
     completedMissions.value = allCompletedMissions;
     campaignsMap.value = newCampaignsMap;
   } catch (err) {
