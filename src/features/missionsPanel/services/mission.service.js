@@ -1,8 +1,8 @@
 import { get } from '@/services/apiService';
 
 /**
- * Fetches all available and locked missions for the current user.
- * @returns {Promise<{available_missions: Array<Object>, locked_missions: Array<Object>}>} An object containing available and locked missions.
+ * Fetches all available and locked missions for the current user, grouped by campaign.
+ * @returns {Promise<Array<Object>>} A list of objects, where each object represents a campaign and contains its missions.
  */
 export const getAvailableMissions = async () => {
   const response = await get('/missions/available');
@@ -13,8 +13,8 @@ export const getAvailableMissions = async () => {
 };
 
 /**
- * Fetches all completed missions for the current user.
- * @returns {Promise<Array<Object>>} A list of completed missions.
+ * Fetches all completed missions for the current user, grouped by campaign.
+ * @returns {Promise<Array<Object>>} A list of objects, where each object represents a campaign and contains its completed missions.
  */
 export const getCompletedMissions = async () => {
   const response = await get('/missions/completed');

@@ -66,6 +66,7 @@
               v-for="mission in completedMissions"
               :key="mission.id"
               :mission="mission"
+              :campaign="campaignsMap[mission.campaign_id]"
               @interact="handleMissionInteract"
             />
           </div>
@@ -112,8 +113,7 @@ import {
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const availableMissions = ref([]);
-const lockedMissions = ref([]);
+const activeMissions = ref([]);
 const completedMissions = ref([]);
 const campaignsMap = ref({}); // Add this ref to store campaign data
 const loading = ref(true);
@@ -127,10 +127,6 @@ const {
   dialogContentProps,
   openMissionDialog,
 } = useMissionInteraction();
-
-const activeMissions = computed(() => {
-  return [...availableMissions.value, ...lockedMissions.value];
-});
 
 // Update the signature and logic of handleMissionInteract
 const handleMissionInteract = async (mission, campaign) => {
@@ -157,29 +153,40 @@ const fetchData = async () => {
   loading.value = true;
   error.value = null;
   try {
-    const [missionsResult, completedResult] = await Promise.all([
+    const [availableResult, completedResult] = await Promise.all([
       getAvailableMissions(),
       getCompletedMissions(),
     ]);
 
-    availableMissions.value = (missionsResult.available_missions || []).map(m => ({ ...m, is_locked: m.is_locked ?? false }));
-    lockedMissions.value = (missionsResult.locked_missions || []).map(m => ({ ...m, is_locked: true }));
-    completedMissions.value = completedResult || [];
+    const newCampaignsMap = {};
+    const allActiveMissions = [];
+    const allCompletedMissions = [];
 
-    // Fetch campaign data for locked missions
-    if (lockedMissions.value.length > 0) {
-      const campaignIds = [...new Set(lockedMissions.value.map(m => m.campaign_id).filter(Boolean))];
-      if (campaignIds.length > 0) {
-        const campaignPromises = campaignIds.map(id => getCampaignById(id));
-        const campaigns = await Promise.all(campaignPromises);
+    // Process available/locked missions
+    (availableResult || []).forEach(group => {
+      newCampaignsMap[group.campaign_id] = {
+        id: group.campaign_id,
+        title: group.campaign_title,
+        cover_url: group.campaign_cover_url,
+      };
+      allActiveMissions.push(...group.missions);
+    });
 
-        const newCampaignsMap = { ...campaignsMap.value };
-        campaigns.forEach(c => {
-          newCampaignsMap[c.id] = c;
-        });
-        campaignsMap.value = newCampaignsMap;
+    // Process completed missions
+    (completedResult || []).forEach(group => {
+      if (!newCampaignsMap[group.campaign_id]) {
+        newCampaignsMap[group.campaign_id] = {
+          id: group.campaign_id,
+          title: group.campaign_title,
+          cover_url: group.campaign_cover_url,
+        };
       }
-    }
+      allCompletedMissions.push(...group.missions);
+    });
+
+    activeMissions.value = allActiveMissions;
+    completedMissions.value = allCompletedMissions;
+    campaignsMap.value = newCampaignsMap;
   } catch (err) {
     error.value = err;
     console.error('Failed to fetch missions:', err);
