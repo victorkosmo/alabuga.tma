@@ -5,12 +5,16 @@
     :class="['border rounded-md block overflow-hidden', !mission.is_completed ? 'cursor-pointer' : 'cursor-default']"
     @click="handleClick"
   >
-    <img
-      v-if="mission.cover_url"
-      :src="mission.cover_url"
-      :alt="mission.title"
-      class="w-full h-32 object-cover"
-    />
+    <div v-if="mission.cover_url" class="relative">
+      <img
+        :src="mission.cover_url"
+        :alt="mission.title"
+        :class="['w-full h-32 object-cover', mission.is_locked && 'grayscale']"
+      />
+      <div v-if="mission.is_locked" class="absolute inset-0 flex items-center justify-center bg-black/30">
+        <Lock class="h-12 w-12 text-white" />
+      </div>
+    </div>
     <div class="p-4">
       <!-- Header: Title and Action -->
       <div class="flex justify-between items-end gap-4">
@@ -40,6 +44,7 @@ import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { Button } from '@/components/ui/button';
 import DynamicBadge from './DynamicBadge.vue';
+import { Lock } from 'lucide-vue-next';
 
 const props = defineProps({
   mission: {
