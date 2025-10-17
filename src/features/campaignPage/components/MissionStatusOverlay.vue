@@ -1,7 +1,25 @@
 <template>
   <div class="absolute inset-0 flex items-center justify-center bg-black/80 text-white">
     <div class="flex flex-col items-center justify-center gap-2 text-center">
-      <component :is="icon" :class="['h-10 w-10', status === 'completed' && 'text-green-500']" />
+      <!-- Locked Status Icon -->
+      <div v-if="status === 'locked'" class="flex items-center gap-2 rounded-full bg-black/30 backdrop-blur-sm p-1 pr-3 h-10">
+        <div class="bg-background text-foreground rounded-full p-1.5">
+          <Lock class="h-4 w-4" />
+        </div>
+        <Avatar v-if="achievementImageUrl" class="h-8 w-8">
+          <AvatarImage :src="achievementImageUrl" :alt="achievementName || 'Achievement'" />
+          <AvatarFallback v-if="achievementName">{{ achievementName.substring(0, 2).toUpperCase() }}</AvatarFallback>
+        </Avatar>
+      </div>
+
+      <!-- Other Statuses Icon -->
+      <component
+        v-else
+        :is="icon"
+        :class="['h-10 w-10', status === 'completed' && 'text-green-500']"
+      />
+
+      <!-- Status Text -->
       <span class="font-semibold text-sm">{{ text }}</span>
     </div>
   </div>
@@ -10,12 +28,21 @@
 <script setup>
 import { computed } from 'vue';
 import { Lock, Clock, CheckCircle2 } from 'lucide-vue-next';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const props = defineProps({
   status: {
     type: String,
     required: true,
     validator: (value) => ['locked', 'pending-review', 'completed'].includes(value),
+  },
+  achievementImageUrl: {
+    type: String,
+    default: null,
+  },
+  achievementName: {
+    type: String,
+    default: null,
   },
 });
 

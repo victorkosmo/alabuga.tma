@@ -11,7 +11,12 @@
         :alt="mission.title"
         class="w-full h-32 object-cover rounded-t-md"
       />
-      <MissionStatusOverlay v-if="missionStatus" :status="missionStatus" />
+      <MissionStatusOverlay
+        v-if="missionStatus"
+        :status="missionStatus"
+        :achievement-image-url="mission.required_achievement_image_url"
+        :achievement-name="mission.required_achievement_name"
+      />
     </div>
     <div class="relative p-4">
       <!-- Campaign Icon -->
