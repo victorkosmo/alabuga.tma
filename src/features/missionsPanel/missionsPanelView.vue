@@ -34,36 +34,52 @@
     </div>
 
     <!-- Content -->
-    <div v-else class="space-y-6">
-      <!-- Available Missions -->
-      <div>
-        <CardTitle class="mb-6">Доступные миссии</CardTitle>
-        <div v-if="availableMissions.length > 0" class="space-y-4">
-          <MissionCard
-            v-for="mission in availableMissions"
-            :key="mission.id"
-            :mission="mission"
-            @interact="handleMissionInteract"
-          />
-        </div>
-        <div v-else class="text-center text-muted-foreground py-4">
-          <p>Сейчас нет доступных миссий. Загляните позже!</p>
-        </div>
-      </div>
+    <div v-else>
+      <Tabs default-value="available" class="w-full">
+        <TabsList class="grid w-full grid-cols-2">
+          <TabsTrigger value="available">
+            Доступные
+          </TabsTrigger>
+          <TabsTrigger value="completed">
+            Завершенные
+          </TabsTrigger>
+        </TabsList>
 
-      <!-- Locked Missions -->
-      <div v-if="lockedMissions.length > 0">
-        <CardTitle class="mb-6">Заблокированные миссии</CardTitle>
-        <div class="space-y-4">
-          <MissionCard
-            v-for="mission in lockedMissions"
-            :key="mission.id"
-            :mission="mission"
-            :campaign="campaignsMap[mission.campaign_id]"
-            @interact="handleMissionInteract"
-          />
-        </div>
-      </div>
+        <TabsContent value="available" class="mt-6">
+          <div v-if="activeMissions.length > 0" class="space-y-6">
+            <div v-for="campaignGroup in activeMissions" :key="campaignGroup.campaign_id">
+              <h2 class="text-lg font-semibold mb-4">{{ campaignGroup.campaign_title }}</h2>
+              <div class="space-y-4">
+                <MissionCard
+                  v-for="mission in campaignGroup.missions"
+                  :key="mission.id"
+                  :mission="mission"
+                  :campaign="campaignsMap[mission.campaign_id]"
+                  @interact="handleMissionInteract"
+                />
+              </div>
+            </div>
+          </div>
+          <div v-else class="text-center text-muted-foreground py-4">
+            <p>Сейчас нет доступных миссий. Загляните позже!</p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="completed" class="mt-6">
+          <div v-if="completedMissions.length > 0" class="space-y-4">
+            <MissionCard
+              v-for="mission in completedMissions"
+              :key="mission.id"
+              :mission="mission"
+              :campaign="campaignsMap[mission.campaign_id]"
+              @interact="handleMissionInteract"
+            />
+          </div>
+          <div v-else class="text-center text-muted-foreground py-4">
+            <p>У вас пока нет завершенных миссий.</p>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   </div>
 
@@ -86,8 +102,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { getAvailableMissions } from './services/mission.service';
+import { ref, onMounted, computed } from 'vue';
+import { getAvailableMissions, getCompletedMissions } from './services/mission.service';
 import { getCampaignById } from '../campaignPage/services/campaign.service';
 import { CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -100,9 +116,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const availableMissions = ref([]);
-const lockedMissions = ref([]);
+const activeMissions = ref([]);
+const completedMissions = ref([]);
 const campaignsMap = ref({}); // Add this ref to store campaign data
 const loading = ref(true);
 const error = ref(null);
@@ -136,30 +153,51 @@ const handleMissionInteract = async (mission, campaign) => {
   }
 };
 
-// Update fetchData to get campaign data and ensure mission state is correct
+// Update fetchData to get all mission types
 const fetchData = async () => {
   loading.value = true;
   error.value = null;
   try {
-    const result = await getAvailableMissions();
-    // Ensure is_locked property is correctly set
-    availableMissions.value = (result.available_missions || []).map(m => ({ ...m, is_locked: m.is_locked ?? false }));
-    lockedMissions.value = (result.locked_missions || []).map(m => ({ ...m, is_locked: true }));
+    const [availableResult, completedResult] = await Promise.all([
+      getAvailableMissions(),
+      getCompletedMissions(),
+    ]);
 
-    // Fetch campaign data for locked missions
-    if (lockedMissions.value.length > 0) {
-      const campaignIds = [...new Set(lockedMissions.value.map(m => m.campaign_id).filter(Boolean))];
-      if (campaignIds.length > 0) {
-        const campaignPromises = campaignIds.map(id => getCampaignById(id));
-        const campaigns = await Promise.all(campaignPromises);
+    const newCampaignsMap = {};
+    const allCompletedMissions = [];
 
-        const newCampaignsMap = { ...campaignsMap.value };
-        campaigns.forEach(c => {
-          newCampaignsMap[c.id] = c;
-        });
-        campaignsMap.value = newCampaignsMap;
+    const processedAvailableResult = (availableResult || []).map(group => {
+      newCampaignsMap[group.campaign_id] = {
+        id: group.campaign_id,
+        title: group.campaign_title,
+        cover_url: group.campaign_cover_url,
+      };
+      const missionsWithCampaignId = group.missions.map(mission => ({
+        ...mission,
+        campaign_id: group.campaign_id,
+      }));
+      return { ...group, missions: missionsWithCampaignId };
+    });
+
+    // Process completed missions
+    (completedResult || []).forEach(group => {
+      if (!newCampaignsMap[group.campaign_id]) {
+        newCampaignsMap[group.campaign_id] = {
+          id: group.campaign_id,
+          title: group.campaign_title,
+          cover_url: group.campaign_cover_url,
+        };
       }
-    }
+      const missionsWithCampaignId = group.missions.map(mission => ({
+        ...mission,
+        campaign_id: group.campaign_id,
+      }));
+      allCompletedMissions.push(...missionsWithCampaignId);
+    });
+
+    activeMissions.value = processedAvailableResult;
+    completedMissions.value = allCompletedMissions;
+    campaignsMap.value = newCampaignsMap;
   } catch (err) {
     error.value = err;
     console.error('Failed to fetch missions:', err);

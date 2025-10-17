@@ -2,20 +2,32 @@
   <component
     :is="wrapperComponent"
     v-bind="wrapperProps"
-    :class="['p-4 border rounded-md block', !mission.is_completed ? 'cursor-pointer' : 'cursor-default']"
+    :class="['border rounded-md block overflow-hidden', !mission.is_completed ? 'cursor-pointer' : 'cursor-default']"
     @click="handleClick"
   >
-    <div>
+    <div v-if="mission.cover_url" class="relative">
+      <img
+        :src="mission.cover_url"
+        :alt="mission.title"
+        :class="['w-full h-32 object-cover', mission.is_locked && 'grayscale']"
+      />
+      <div v-if="mission.is_locked" class="absolute inset-0 flex items-center justify-center bg-black/30">
+        <Lock class="h-12 w-12 text-white" />
+      </div>
+    </div>
+    <div class="p-4">
       <!-- Header: Title and Action -->
-      <div class="flex justify-between items-end gap-4">
-        <h3 class="font-semibold flex-1 min-w-0">{{ mission.title }}</h3>
+      <div class="flex justify-between items-start gap-4">
+        <div class="flex-1 min-w-0">
+          <p v-if="mission.campaign_title" class="inline-block rounded-md border bg-secondary text-secondary-foreground px-2 py-0.5 text-xs font-medium mb-2 truncate">
+            {{ mission.campaign_title }}
+          </p>
+          <h3 class="font-semibold leading-tight">{{ mission.title }}</h3>
+        </div>
 
         <div class="flex-shrink-0 w-24 flex items-center justify-center">
-          <Button v-if="isStartable" class="w-full" size="sm">
-            Начать
-          </Button>
           <DynamicBadge
-            v-else
+            v-if="badgeType"
             :type="badgeType"
             :achievement="requiredAchievement"
             class="w-24 h-24"
@@ -25,6 +37,11 @@
 
       <!-- Description: Full width -->
       <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
+
+      <!-- Completion Stats -->
+      <div v-if="mission.completion_stats" class="pt-3">
+        <MissionCompletionStats :stats="mission.completion_stats" />
+      </div>
     </div>
   </component>
 </template>
@@ -34,6 +51,8 @@ import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { Button } from '@/components/ui/button';
 import DynamicBadge from './DynamicBadge.vue';
+import MissionCompletionStats from './MissionCompletionStats.vue';
+import { Lock } from 'lucide-vue-next';
 
 const props = defineProps({
   mission: {
@@ -58,7 +77,6 @@ const isStartable = computed(() => {
 const badgeType = computed(() => {
   if (props.mission.is_completed) return 'completed';
   if (props.mission.submission_status === 'PENDING_REVIEW') return 'pending-review';
-  if (props.mission.type === 'QR_CODE' && !props.mission.is_completed && !props.mission.is_locked) return 'scan-qr';
   if (props.mission.is_locked && requiredAchievement.value) return 'achievement-lock';
   if (props.mission.is_locked) return 'locked';
   return ''; // Fallback
