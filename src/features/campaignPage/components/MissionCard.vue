@@ -2,20 +2,28 @@
   <component
     :is="wrapperComponent"
     v-bind="wrapperProps"
-    :class="['border rounded-md block overflow-hidden', !mission.is_completed ? 'cursor-pointer' : 'cursor-default']"
+    :class="['border rounded-md block', !mission.is_completed ? 'cursor-pointer' : 'cursor-default']"
     @click="handleClick"
   >
     <div v-if="mission.cover_url" class="relative">
       <img
         :src="mission.cover_url"
         :alt="mission.title"
-        :class="['w-full h-32 object-cover', mission.is_locked && 'grayscale']"
+        :class="['w-full h-32 object-cover rounded-t-md', mission.is_locked && 'grayscale']"
       />
       <div v-if="mission.is_locked" class="absolute inset-0 flex items-center justify-center bg-black/30">
         <Lock class="h-12 w-12 text-white" />
       </div>
     </div>
-    <div class="p-4">
+    <div class="relative p-4">
+      <!-- Campaign Icon -->
+      <div
+        v-if="campaign && campaign.campaign_icon_url"
+        class="absolute left-4 -top-5 bg-background rounded-full p-0.5"
+      >
+        <img :src="campaign.campaign_icon_url" :alt="campaign.title || 'Campaign icon'" class="h-10 w-10 rounded-full" />
+      </div>
+
       <!-- Header: Title and Action -->
       <div class="flex justify-between items-start gap-4">
         <div class="flex-1 min-w-0">
