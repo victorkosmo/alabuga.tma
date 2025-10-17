@@ -1,12 +1,12 @@
 <template>
-  <div class="absolute inset-0 flex items-center justify-center bg-black/80 text-white">
+  <div class="absolute inset-0 flex items-center justify-center bg-black/60 text-white">
     <div class="flex flex-col items-center justify-center gap-2 text-center">
       <!-- Locked Status Icon -->
-      <div v-if="status === 'locked'" class="flex items-center gap-2 rounded-full bg-black/30 backdrop-blur-sm p-1 pr-3 h-10">
-        <div class="bg-background text-foreground rounded-full p-1.5">
-          <Lock class="h-4 w-4" />
+      <div v-if="status === 'locked'" class="flex items-center gap-2 rounded-full backdrop-blur-md p-1 pr-3 h-fit">
+        <div class="text-foreground rounded-full p-1.5">
+          <Lock class="h-5 w-5" />
         </div>
-        <Avatar v-if="achievementImageUrl" class="h-8 w-8">
+        <Avatar v-if="achievementImageUrl" class="h-10 w-10">
           <AvatarImage :src="achievementImageUrl" :alt="achievementName || 'Achievement'" />
           <AvatarFallback v-if="achievementName">{{ achievementName.substring(0, 2).toUpperCase() }}</AvatarFallback>
         </Avatar>
