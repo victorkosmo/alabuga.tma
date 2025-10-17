@@ -1,14 +1,14 @@
-// src/features/campaignPage/components/LockedMissionDialogContent.vue
 <template>
   <div class="space-y-4">
-    <div class="flex items-center gap-3">
-      <Avatar>
+    <div class="flex flex-col items-center gap-3 text-center">
+      <Avatar class="h-20 w-20">
         <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" />
         <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
       </Avatar>
-      <span class="font-semibold">{{ achievement.name }}</span>
+      <span class="text-lg font-semibold">{{ achievement.name }}</span>
     </div>
-    <p v-if="achievement.description" class="text-sm text-muted-foreground">
+
+    <p v-if="achievement.description" class="text-sm text-muted-foreground pt-2">
       {{ achievement.description }}
     </p>
 
