@@ -7,17 +7,18 @@
           <Lock class="h-5 w-5" />
         </div>
         <Avatar v-if="achievementImageUrl" class="h-10 w-10">
-          <AvatarImage :src="achievementImageUrl" :alt="achievementName || 'Achievement'" />
+          <AvatarImage :src="achievementImageUrl" :alt="achievementName || 'Achievement'" class="grayscale" />
           <AvatarFallback v-if="achievementName">{{ achievementName.substring(0, 2).toUpperCase() }}</AvatarFallback>
         </Avatar>
       </div>
 
       <!-- Other Statuses Icon -->
-      <component
-        v-else
-        :is="icon"
-        :class="['h-10 w-10', status === 'completed' && 'text-green-500']"
-      />
+      <div v-else class="rounded-full backdrop-blur-md p-2.5">
+        <component
+          :is="icon"
+          :class="['h-8 w-8', status === 'completed' && 'text-green-500']"
+        />
+      </div>
 
       <!-- Status Text -->
       <span class="font-semibold text-sm">{{ text }}</span>
