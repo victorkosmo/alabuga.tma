@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute inset-0 flex items-center justify-center bg-black/50 text-white">
+  <div class="absolute inset-0 flex items-center justify-center bg-black/80 text-white">
     <div class="flex flex-col items-center justify-center gap-2 text-center">
       <component :is="icon" :class="['h-10 w-10', status === 'completed' && 'text-green-500']" />
       <span class="font-semibold text-sm">{{ text }}</span>
