@@ -193,6 +193,7 @@ const fetchData = async () => {
       const missionsWithCampaignId = group.missions.map(mission => ({
         ...mission,
         campaign_id: group.campaign_id,
+        is_completed: true,
       }));
       allCompletedMissions.push(...missionsWithCampaignId);
     });
