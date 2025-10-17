@@ -1,10 +1,20 @@
 <template>
   <div class="space-y-4">
     <div class="flex flex-col items-center gap-3 text-center">
-      <Avatar class="h-20 w-20 achievement-avatar-pulse">
-        <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" />
-        <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
-      </Avatar>
+      <!-- Container for the avatar and the orbiting effect -->
+      <div class="relative flex h-28 w-28 items-center justify-center">
+        <!-- The orbiting particles container -->
+        <div class="particle-container">
+          <div class="particle particle-1" />
+          <div class="particle particle-2" />
+          <div class="particle particle-3" />
+        </div>
+        <!-- The Avatar itself, placed on top -->
+        <Avatar class="relative z-10 h-20 w-20">
+          <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" />
+          <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
+        </Avatar>
+      </div>
       <span class="text-lg font-semibold">{{ achievement.name }}</span>
     </div>
 
@@ -44,28 +54,54 @@ defineProps({
 </script>
 
 <style scoped>
-.achievement-avatar-pulse {
-  /* Two overlapping, expanding waves with a 2-second offset */
-  animation: blue-wave 4s infinite linear, purple-wave 4s infinite linear 2s;
+.particle-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: rotate 12s linear infinite;
 }
 
-/* Blue wave: starts brighter and expands further */
-@keyframes blue-wave {
-  from {
-    box-shadow: 0 0 0 0px rgba(59, 130, 246, 0.7);
-  }
-  to {
-    box-shadow: 0 0 0 20px rgba(59, 130, 246, 0);
-  }
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  /* Creates a soft, glowing look for the particles */
+  filter: blur(4px);
 }
 
-/* Purple wave: starts brighter and expands further */
-@keyframes purple-wave {
+.particle-1 {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: rgba(59, 130, 246, 0.9); /* Blue */
+}
+
+.particle-2 {
+  bottom: 5%;
+  left: 15%;
+  width: 12px;
+  height: 12px;
+  background-color: rgba(139, 92, 246, 0.9); /* Purple */
+}
+
+.particle-3 {
+  bottom: 25%;
+  right: 5%;
+  width: 8px;
+  height: 8px;
+  background-color: rgba(99, 102, 241, 0.9); /* Indigo */
+}
+
+/* The main rotation animation for the container */
+@keyframes rotate {
   from {
-    box-shadow: 0 0 0 0px rgba(139, 92, 246, 0.7);
+    transform: rotate(0deg);
   }
   to {
-    box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
+    transform: rotate(360deg);
   }
 }
 </style>
