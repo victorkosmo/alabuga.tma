@@ -1,18 +1,18 @@
 <template>
   <div class="flex items-center text-sm text-muted-foreground">
     <div v-if="stats.total_completions === 0">
-      Эту миссию еще никто не выполнил. Станьте первым
+      Миссию еще никто не выполнил. Станьте первым!
     </div>
     <div v-else-if="stats.total_completions === 1">
-      Миссию завершил 1 чел.
+      Миссию выполнил 1 чел.
     </div>
     <div v-else class="flex items-center gap-2">
-      <span>Миссию завершили:</span>
+      <span>Выполнили:</span>
       <div class="flex -space-x-2">
         <Avatar
           v-for="user in visibleUsers"
           :key="user.id"
-          class="h-8 w-8 border-2 border-background"
+          class="h-7 w-7 border-2 border-background"
         >
           <AvatarImage v-if="user.avatar_url" :src="user.avatar_url" :alt="user.first_name || ''" />
           <AvatarFallback :style="{ backgroundColor: user.color }" class="text-white">
