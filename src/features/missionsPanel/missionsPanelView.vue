@@ -172,6 +172,7 @@ const fetchData = async () => {
         title: group.campaign_title,
         cover_url: group.campaign_cover_url,
         campaign_icon_url: group.campaign_icon_url,
+        achievements: group.achievements,
       };
       const missionsWithCampaignId = group.missions.map(mission => ({
         ...mission,
@@ -188,6 +189,8 @@ const fetchData = async () => {
           title: group.campaign_title,
           cover_url: group.campaign_cover_url,
           campaign_icon_url: group.campaign_icon_url,
+          // Achievements are not expected for completed-only campaigns
+          achievements: group.achievements || [],
         };
       }
       const missionsWithCampaignId = group.missions.map(mission => ({
