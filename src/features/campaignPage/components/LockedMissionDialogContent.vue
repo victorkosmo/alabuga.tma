@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-4">
     <div class="flex flex-col items-center gap-3 text-center">
-      <Avatar class="h-20 w-20 animate-vibrant-pulse">
+      <Avatar class="h-20 w-20 achievement-avatar-pulse">
         <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" />
         <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
       </Avatar>
@@ -42,3 +42,21 @@ defineProps({
   },
 });
 </script>
+
+<style scoped>
+.achievement-avatar-pulse {
+  animation: vibrant-pulse 2s infinite;
+}
+
+@keyframes vibrant-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(252, 211, 77, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(252, 211, 77, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(252, 211, 77, 0);
+  }
+}
+</style>
