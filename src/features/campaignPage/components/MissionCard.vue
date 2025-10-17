@@ -35,8 +35,8 @@
       <!-- Description: Full width -->
       <p v-if="mission.description" class="text-sm text-muted-foreground pt-2">{{ mission.description }}</p>
 
-      <!-- Completion Stats -->
-      <div v-if="mission.completion_stats" class="pt-3">
+      <!-- Completion Stats Footer -->
+      <div v-if="mission.completion_stats" class="mt-3 -mx-4 -mb-4 p-4 border-t bg-muted/50 rounded-b-md">
         <MissionCompletionStats :stats="mission.completion_stats" />
       </div>
     </div>
