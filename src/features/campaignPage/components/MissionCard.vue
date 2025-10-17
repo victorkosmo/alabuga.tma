@@ -37,7 +37,6 @@
           <DynamicBadge
             v-if="badgeType"
             :type="badgeType"
-            :achievement="requiredAchievement"
             class="w-24 h-24"
           />
         </div>
@@ -85,7 +84,6 @@ const isStartable = computed(() => {
 const badgeType = computed(() => {
   if (props.mission.is_completed) return 'completed';
   if (props.mission.submission_status === 'PENDING_REVIEW') return 'pending-review';
-  if (props.mission.is_locked && requiredAchievement.value) return 'achievement-lock';
   if (props.mission.is_locked) return 'locked';
   return ''; // Fallback
 });
@@ -108,18 +106,6 @@ const wrapperProps = computed(() => {
     };
   }
   return {};
-});
-
-const requiredAchievement = computed(() => {
-  if (!props.mission.is_locked || !props.mission.required_achievement_name) return null;
-  if (props.campaign?.achievements) {
-    return props.campaign.achievements.find(a => a.name === props.mission.required_achievement_name) || null;
-  }
-  // When campaign is not available, create a mock achievement object for DynamicBadge
-  return {
-    name: props.mission.required_achievement_name,
-    image_url: null,
-  };
 });
 
 const handleClick = () => {
