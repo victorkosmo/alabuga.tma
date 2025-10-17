@@ -1,13 +1,10 @@
 <template>
   <div class="space-y-4">
     <div class="flex flex-col items-center gap-3 text-center">
-      <div class="relative">
-        <div class="absolute -inset-2 z-0 rounded-full bg-primary/20 blur-xl animate-pulse" />
-        <Avatar class="relative z-10 h-20 w-20">
-          <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" />
-          <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
-        </Avatar>
-      </div>
+      <Avatar class="h-20 w-20 animate-vibrant-pulse">
+        <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" />
+        <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
+      </Avatar>
       <span class="text-lg font-semibold">{{ achievement.name }}</span>
     </div>
 
