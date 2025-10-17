@@ -9,14 +9,9 @@
       <img
         :src="mission.cover_url"
         :alt="mission.title"
-        :class="['w-full h-32 object-cover rounded-t-md', (mission.is_locked || mission.submission_status === 'PENDING_REVIEW') && 'grayscale']"
+        :class="['w-full h-32 object-cover rounded-t-md', missionStatus && 'grayscale']"
       />
-      <div v-if="mission.is_locked" class="absolute inset-0 flex items-center justify-center bg-black/30">
-        <Lock class="h-12 w-12 text-white" />
-      </div>
-      <div v-else-if="mission.submission_status === 'PENDING_REVIEW'" class="absolute inset-0 flex items-center justify-center bg-black/30">
-        <Clock class="h-12 w-12 text-white" />
-      </div>
+      <MissionStatusOverlay v-if="missionStatus" :status="missionStatus" />
     </div>
     <div class="relative p-4">
       <!-- Campaign Icon -->
@@ -35,14 +30,6 @@
           </p>
           <h3 class="font-semibold leading-tight pt-3">{{ mission.title }}</h3>
         </div>
-
-        <div class="flex-shrink-0 w-24 flex items-center justify-center">
-          <DynamicBadge
-            v-if="badgeType"
-            :type="badgeType"
-            class="w-24 h-24"
-          />
-        </div>
       </div>
 
       <!-- Description: Full width -->
@@ -59,10 +46,8 @@
 <script setup>
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
-import { Button } from '@/components/ui/button';
-import DynamicBadge from './DynamicBadge.vue';
+import MissionStatusOverlay from './MissionStatusOverlay.vue';
 import MissionCompletionStats from './MissionCompletionStats.vue';
-import { Lock, Clock } from 'lucide-vue-next';
 
 const props = defineProps({
   mission: {
@@ -77,16 +62,18 @@ const props = defineProps({
 
 const emit = defineEmits(['interact']);
 
+const missionStatus = computed(() => {
+  if (props.mission.is_completed) return 'completed';
+  if (props.mission.submission_status === 'PENDING_REVIEW') return 'pending-review';
+  if (props.mission.is_locked) return 'locked';
+  return null;
+});
+
 const isStartable = computed(() => {
   return !props.mission.is_completed &&
          !props.mission.is_locked &&
          props.mission.submission_status !== 'PENDING_REVIEW' &&
          props.mission.type !== 'QR_CODE';
-});
-
-const badgeType = computed(() => {
-  if (props.mission.is_completed) return 'completed';
-  return ''; // Fallback
 });
 
 const isInteractable = computed(() => {
