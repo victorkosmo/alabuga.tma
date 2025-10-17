@@ -8,14 +8,14 @@
     </div>
     <div v-else class="flex items-center gap-2">
       <span>Выполнили:</span>
-      <div class="flex -space-x-2">
+      <div class="flex -space-x-1.5">
         <Avatar
           v-for="user in visibleUsers"
           :key="user.id"
-          class="h-7 w-7 border-2 border-background"
+          class="h-6 w-6 border-1 border-background"
         >
           <AvatarImage v-if="user.avatar_url" :src="user.avatar_url" :alt="user.first_name || ''" />
-          <AvatarFallback :style="{ backgroundColor: user.color }" class="text-white">
+          <AvatarFallback :style="{ backgroundColor: user.color }" class="text-white text-[11px]">
             {{ getInitials(user) }}
           </AvatarFallback>
         </Avatar>
