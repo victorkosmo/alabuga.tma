@@ -14,7 +14,7 @@
     <!-- Content -->
     <div v-else-if="mission">
       <div
-        class="relative h-60 w-full bg-cover bg-center"
+        class="relative h-40 w-full bg-cover bg-center"
         :style="{ backgroundImage: mission.cover_url ? `url(${mission.cover_url})` : 'none' }"
       >
         <div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
