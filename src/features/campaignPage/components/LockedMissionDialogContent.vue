@@ -45,27 +45,27 @@ defineProps({
 
 <style scoped>
 .achievement-avatar-pulse {
-  /* Apply two animations: a blue pulse, and a purple pulse delayed by 2 seconds */
-  animation: blue-pulse 4s infinite ease-out, purple-pulse 4s infinite ease-out 2s;
+  /* Two overlapping, expanding waves with a 2-second offset */
+  animation: blue-wave 4s infinite linear, purple-wave 4s infinite linear 2s;
 }
 
-/* Blue wave animation */
-@keyframes blue-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); /* blue-500 with 50% opacity */
+/* Blue wave: starts brighter and expands further */
+@keyframes blue-wave {
+  from {
+    box-shadow: 0 0 0 0px rgba(59, 130, 246, 0.7);
   }
-  100% {
-    box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
+  to {
+    box-shadow: 0 0 0 20px rgba(59, 130, 246, 0);
   }
 }
 
-/* Purple wave animation */
-@keyframes purple-pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.5); /* violet-500 with 50% opacity */
+/* Purple wave: starts brighter and expands further */
+@keyframes purple-wave {
+  from {
+    box-shadow: 0 0 0 0px rgba(139, 92, 246, 0.7);
   }
-  100% {
-    box-shadow: 0 0 0 12px rgba(139, 92, 246, 0);
+  to {
+    box-shadow: 0 0 0 20px rgba(139, 92, 246, 0);
   }
 }
 </style>
