@@ -9,10 +9,13 @@
       <img
         :src="mission.cover_url"
         :alt="mission.title"
-        :class="['w-full h-32 object-cover rounded-t-md', mission.is_locked && 'grayscale']"
+        :class="['w-full h-32 object-cover rounded-t-md', (mission.is_locked || mission.submission_status === 'PENDING_REVIEW') && 'grayscale']"
       />
       <div v-if="mission.is_locked" class="absolute inset-0 flex items-center justify-center bg-black/30">
         <Lock class="h-12 w-12 text-white" />
+      </div>
+      <div v-else-if="mission.submission_status === 'PENDING_REVIEW'" class="absolute inset-0 flex items-center justify-center bg-black/30">
+        <Clock class="h-12 w-12 text-white" />
       </div>
     </div>
     <div class="relative p-4">
@@ -59,7 +62,7 @@ import { RouterLink } from 'vue-router';
 import { Button } from '@/components/ui/button';
 import DynamicBadge from './DynamicBadge.vue';
 import MissionCompletionStats from './MissionCompletionStats.vue';
-import { Lock } from 'lucide-vue-next';
+import { Lock, Clock } from 'lucide-vue-next';
 
 const props = defineProps({
   mission: {
@@ -83,8 +86,6 @@ const isStartable = computed(() => {
 
 const badgeType = computed(() => {
   if (props.mission.is_completed) return 'completed';
-  if (props.mission.submission_status === 'PENDING_REVIEW') return 'pending-review';
-  if (props.mission.is_locked) return 'locked';
   return ''; // Fallback
 });
 
