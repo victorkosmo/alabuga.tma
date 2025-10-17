@@ -5,12 +5,15 @@
     <!-- Loading State -->
     <div v-if="loading" class="space-y-4">
       <Card v-for="i in 3" :key="i">
-        <CardContent class="p-4 space-y-2">
-          <Skeleton class="h-5 w-1/3" />
+        <CardContent class="p-4 space-y-3">
+          <Skeleton class="h-6 w-1/3" />
           <Skeleton class="h-4 w-full" />
-          <div class="flex gap-4 pt-2">
-            <Skeleton class="h-4 w-20" />
-            <Skeleton class="h-4 w-24" />
+          <div class="pt-2">
+            <div class="flex justify-between mb-2">
+              <Skeleton class="h-4 w-20" />
+              <Skeleton class="h-4 w-16" />
+            </div>
+            <Skeleton class="h-2 w-full" />
           </div>
         </CardContent>
       </Card>
@@ -27,14 +30,17 @@
         <CardContent class="p-4">
           <h3 class="font-semibold text-lg">{{ competency.name }}</h3>
           <p v-if="competency.description" class="text-sm text-muted-foreground mt-1">{{ competency.description }}</p>
-          <div class="mt-4 flex items-center gap-6 text-sm">
-            <div>
-              <span class="text-muted-foreground">Уровень: </span>
-              <span class="font-bold text-base">{{ competency.level }}</span>
+          <div class="mt-4 space-y-3">
+            <div class="flex items-baseline gap-2">
+              <span class="text-muted-foreground text-sm">Уровень: </span>
+              <span class="font-bold text-2xl">{{ competency.level }}</span>
             </div>
             <div>
-              <span class="text-muted-foreground">Прогресс: </span>
-              <span class="font-bold text-base">{{ competency.progress_points }} очков</span>
+              <div class="flex justify-between items-center mb-1 text-sm">
+                <span class="text-muted-foreground">Прогресс</span>
+                <span class="font-medium">{{ competency.progress_points }} / 100</span>
+              </div>
+              <Progress :model-value="competency.progress_points" class="h-2" />
             </div>
           </div>
         </CardContent>
@@ -53,6 +59,7 @@ import { ref, onMounted } from 'vue';
 import { getGlobalCompetencies } from './services/progress.service';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Progress } from '@/components/ui/progress';
 
 const competencies = ref([]);
 const loading = ref(true);
