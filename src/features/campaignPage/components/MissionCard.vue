@@ -30,7 +30,7 @@
           <p v-if="mission.campaign_title" class="inline-block rounded-md border bg-secondary text-secondary-foreground px-2 py-0.5 text-xs font-medium mb-2 truncate">
             {{ mission.campaign_title }}
           </p>
-          <h3 class="font-semibold leading-tight">{{ mission.title }}</h3>
+          <h3 class="font-semibold leading-tight pt-3">{{ mission.title }}</h3>
         </div>
 
         <div class="flex-shrink-0 w-24 flex items-center justify-center">
@@ -44,7 +44,7 @@
       </div>
 
       <!-- Description: Full width -->
-      <p v-if="mission.description" class="text-sm text-muted-foreground pt-3">{{ mission.description }}</p>
+      <p v-if="mission.description" class="text-sm text-muted-foreground pt-2">{{ mission.description }}</p>
 
       <!-- Completion Stats -->
       <div v-if="mission.completion_stats" class="pt-3">
