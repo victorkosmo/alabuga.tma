@@ -9,7 +9,7 @@
       <img
         :src="mission.cover_url"
         :alt="mission.title"
-        :class="['w-full h-32 object-cover rounded-t-md', missionStatus && 'grayscale']"
+        :class="['w-full h-32 object-cover rounded-t-md', shouldGrayscale && 'grayscale']"
       />
       <MissionStatusOverlay v-if="missionStatus" :status="missionStatus" />
     </div>
@@ -67,6 +67,10 @@ const missionStatus = computed(() => {
   if (props.mission.submission_status === 'PENDING_REVIEW') return 'pending-review';
   if (props.mission.is_locked) return 'locked';
   return null;
+});
+
+const shouldGrayscale = computed(() => {
+  return missionStatus.value && missionStatus.value !== 'completed';
 });
 
 const isStartable = computed(() => {
