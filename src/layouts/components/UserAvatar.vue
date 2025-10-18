@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative pr-3">
     <Avatar class="h-12 w-12">
       <AvatarImage
         v-if="user.avatar_url"
@@ -13,7 +13,7 @@
       />
       <AvatarFallback v-else>{{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}</AvatarFallback>
     </Avatar>
-    <Avatar v-if="user.avatar_url && user.rank_image_url" class="absolute bottom-0 right-0 h-5 w-5 border-2 border-background">
+    <Avatar v-if="user.avatar_url && user.rank_image_url" class="absolute bottom-0 right-0 h-7 w-7">
       <AvatarImage :src="user.rank_image_url" :alt="user.rank_title" />
     </Avatar>
   </div>

@@ -24,7 +24,7 @@
     <div v-else-if="user" class="flex flex-row items-center justify-between gap-4 p-1">
       <Dialog v-model:open="isEditDialogOpen">
         <DialogTrigger as-child>
-          <div class="flex flex-row items-center gap-4 overflow-hidden cursor-pointer">
+          <div class="flex flex-row items-center gap-2 overflow-hidden cursor-pointer">
             <UserAvatar :user="user" />
             <div class="overflow-hidden">
               <div class="flex items-center gap-2">
