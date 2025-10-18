@@ -27,18 +27,28 @@
       </div>
     </div>
 
+    <div v-if="!achievement.is_completed && achievement.required_mission_titles?.length > 0">
+      <h5 class="font-semibold text-sm mb-2">Для получения нужно выполнить миссии:</h5>
+      <ul class="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+        <li v-for="(title, index) in achievement.required_mission_titles" :key="index">
+          {{ title }}
+        </li>
+      </ul>
+    </div>
+
     <div v-if="achievement.is_completed && achievement.awarded_at">
       <h5 class="font-semibold text-sm mb-1">Получено</h5>
       <p class="text-sm text-muted-foreground">{{ new Date(achievement.awarded_at).toLocaleString('ru-RU') }}</p>
     </div>
 
-    <div v-if="achievement.campaign_icon_url">
+    <div v-if="achievement.campaign_title">
       <h5 class="font-semibold text-sm mb-2">Из кампании</h5>
       <div class="flex items-center gap-2">
-        <Avatar class="h-10 w-10">
-          <AvatarImage :src="achievement.campaign_icon_url" alt="Campaign Icon" />
+        <Avatar v-if="achievement.campaign_icon_url" class="h-10 w-10">
+          <AvatarImage :src="achievement.campaign_icon_url" :alt="achievement.campaign_title" />
           <AvatarFallback />
         </Avatar>
+        <span class="font-medium text-sm">{{ achievement.campaign_title }}</span>
       </div>
     </div>
   </div>
