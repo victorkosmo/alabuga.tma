@@ -2,12 +2,12 @@
   <div class="space-y-4 py-4">
     <div class="flex flex-col items-center gap-3 text-center">
       <div class="relative flex h-28 w-28 items-center justify-center">
-        <div v-if="!achievement.is_completed" class="particle-container">
+        <div class="particle-container">
           <div class="particle particle-1" />
           <div class="particle particle-2" />
           <div class="particle particle-3" />
         </div>
-        <Avatar :class="['relative z-10 h-20 w-20 border-4', achievement.is_completed ? 'border-green-500' : 'border-border']">
+        <Avatar :class="['relative z-10 h-20 w-20 border-4', 'border-border']">
           <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" />
           <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
         </Avatar>

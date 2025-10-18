@@ -52,7 +52,7 @@
               @click="openAchievementDialog(achievement)"
             >
               <div class="relative">
-                <Avatar :class="['h-16 w-16 border-2', achievement.is_completed ? 'border-green-500' : 'border-border']">
+                <Avatar :class="['h-16 w-16 border-2', 'border-border']">
                   <AvatarImage v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" :class="[!achievement.is_completed && 'grayscale']" />
                   <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
                 </Avatar>
