@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 md:p-6">
+  <div class="pb-6">
     <!-- Loading State -->
     <div v-if="loading">
       <p>Загрузка миссии...</p>
@@ -13,21 +13,32 @@
 
     <!-- Content -->
     <div v-else-if="mission">
-      <div class="flex items-center gap-3 mb-4">
-        <router-link :to="`/campaign/${campaignId}`">
-          <Button variant="outline" size="icon" class="h-10 w-10 rounded-full">
-            <ArrowLeft class="h-5 w-5" />
-          </Button>
-        </router-link>
-        <h1 class="text-2xl font-bold">{{ mission.title }}</h1>
+      <div
+        class="relative h-40 w-full bg-cover bg-center"
+        :style="{ backgroundImage: mission.cover_url ? `url(${mission.cover_url})` : 'none' }"
+      >
+        <div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+        <div class="relative z-10 flex h-full items-end p-4 md:p-6">
+          <div class="flex w-full items-center gap-3">
+            <router-link :to="`/campaign/${campaignId}`">
+              <Button variant="outline" size="icon" class="h-10 w-10 rounded-full bg-background/50 backdrop-blur-sm">
+                <ArrowLeft class="h-5 w-5" />
+              </Button>
+            </router-link>
+            <h1 class="text-2xl font-bold text-foreground drop-shadow-md">{{ mission.title }}</h1>
+          </div>
+        </div>
       </div>
-      <p v-if="mission.description && mission.type !== 'MANUAL_URL'" class="text-muted-foreground mb-6">{{ mission.description }}</p>
 
-      <!-- Mission Type Dispatcher -->
-      <UrlSubmissionForm v-if="mission.type === 'MANUAL_URL'" :mission="mission" :campaign-id="campaignId" />
-      <QuizSubmissionForm v-else-if="mission.type === 'QUIZ'" :mission="mission" :campaign-id="campaignId" />
-      <div v-else>
-        <p>Этот тип миссии ({{ mission.type }}) пока не поддерживается.</p>
+      <div class="space-y-6 p-4 md:p-6">
+        <p v-if="mission.description && mission.type !== 'MANUAL_URL'" class="text-muted-foreground">{{ mission.description }}</p>
+
+        <!-- Mission Type Dispatcher -->
+        <UrlSubmissionForm v-if="mission.type === 'MANUAL_URL'" :mission="mission" :campaign-id="campaignId" />
+        <QuizSubmissionForm v-else-if="mission.type === 'QUIZ'" :mission="mission" :campaign-id="campaignId" />
+        <div v-else>
+          <p>Этот тип миссии ({{ mission.type }}) пока не поддерживается.</p>
+        </div>
       </div>
     </div>
   </div>

@@ -24,17 +24,14 @@
     <div v-else-if="user" class="flex flex-row items-center justify-between gap-4 p-1">
       <Dialog v-model:open="isEditDialogOpen">
         <DialogTrigger as-child>
-          <div class="flex flex-row items-center gap-4 overflow-hidden cursor-pointer">
-            <Avatar class="h-12 w-12">
-              <AvatarImage v-if="user.avatar_url" :src="user.avatar_url" :alt="user.username" />
-              <AvatarFallback>{{ user.first_name?.charAt(0) }}{{ user.last_name?.charAt(0) }}</AvatarFallback>
-            </Avatar>
+          <div class="flex flex-row items-center gap-2 overflow-hidden cursor-pointer">
+            <UserAvatar :user="user" />
             <div class="overflow-hidden">
               <div class="flex items-center gap-2">
                 <h1 class="font-semibold text-lg truncate">{{ user.first_name }} {{ user.last_name }}</h1>
                 <Pencil class="h-4 w-4 text-muted-foreground flex-shrink-0" />
               </div>
-              <p class="text-sm text-muted-foreground truncate">@{{ user.username }}</p>
+              <p class="text-sm text-muted-foreground truncate">{{ user.rank_title || `@${user.username}` }}</p>
             </div>
           </div>
         </DialogTrigger>
@@ -76,7 +73,7 @@
 import { ref, reactive, computed, watch, onMounted } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/user';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import UserAvatar from './UserAvatar.vue';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
