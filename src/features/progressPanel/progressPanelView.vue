@@ -57,7 +57,7 @@
                   <AvatarFallback>{{ achievement.name.substring(0, 2).toUpperCase() }}</AvatarFallback>
                 </Avatar>
                 <Avatar v-if="achievement.campaign_icon_url" class="absolute -bottom-2 -right-2 h-8 w-8 border-2 border-background">
-                  <AvatarImage :src="achievement.campaign_icon_url" alt="Campaign Icon" />
+                  <AvatarImage :src="achievement.campaign_icon_url" :alt="achievement.campaign_title" />
                   <AvatarFallback />
                 </Avatar>
               </div>
@@ -67,12 +67,15 @@
         </CardContent>
       </Card>
 
-      <div v-if="competencies.length > 0" class="space-y-4">
-        <Card v-for="competency in competencies" :key="competency.id">
-          <CardContent class="p-4">
-            <h3 class="font-semibold text-lg">{{ competency.name }}</h3>
-            <div class="mt-4 space-y-3">
-              <div>
+      <Card v-if="competencies.length > 0">
+        <CardHeader>
+          <CardTitle>Навыки</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div class="space-y-4">
+            <div v-for="competency in competencies" :key="competency.id">
+              <h3 class="font-semibold text-lg">{{ competency.name }}</h3>
+              <div class="mt-2">
                 <div class="flex justify-between items-center mb-1 text-sm">
                   <span class="text-muted-foreground">Прогресс</span>
                   <span class="font-medium">{{ competency.progress_points }} / 100</span>
@@ -80,9 +83,9 @@
                 <Progress :model-value="competency.progress_points" class="h-2" />
               </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
 
     <!-- Empty State -->
@@ -137,7 +140,7 @@ const fetchData = async () => {
       getUserAchievements(),
       getGlobalCompetencies(),
     ]);
-    achievements.value = achievementsResult;
+    achievements.value = achievementsResult.sort((a, b) => b.is_completed - a.is_completed);
     competencies.value = competenciesResult;
   } catch (err) {
     error.value = err;
