@@ -13,6 +13,16 @@
         </Avatar>
       </div>
       <span class="text-lg font-semibold">{{ achievement.name }}</span>
+      <div v-if="achievement.campaign_title" class="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-secondary px-3 py-1 text-xs">
+        <span class="text-muted-foreground">Событие:</span>
+        <div class="flex items-center gap-1.5">
+          <Avatar v-if="achievement.campaign_icon_url" class="h-4 w-4">
+            <AvatarImage :src="achievement.campaign_icon_url" :alt="achievement.campaign_title" />
+            <AvatarFallback />
+          </Avatar>
+          <span class="font-semibold text-secondary-foreground">{{ achievement.campaign_title }}</span>
+        </div>
+      </div>
     </div>
 
     <p v-if="achievement.description" class="text-sm text-muted-foreground text-center">
@@ -39,17 +49,6 @@
     <div v-if="achievement.is_completed && achievement.awarded_at">
       <h5 class="font-semibold text-sm mb-1">Получено</h5>
       <p class="text-sm text-muted-foreground">{{ new Date(achievement.awarded_at).toLocaleString('ru-RU') }}</p>
-    </div>
-
-    <div v-if="achievement.campaign_title">
-      <h5 class="font-semibold text-sm mb-2">Из кампании</h5>
-      <div class="flex items-center gap-2">
-        <Avatar v-if="achievement.campaign_icon_url" class="h-10 w-10">
-          <AvatarImage :src="achievement.campaign_icon_url" :alt="achievement.campaign_title" />
-          <AvatarFallback />
-        </Avatar>
-        <span class="font-medium text-sm">{{ achievement.campaign_title }}</span>
-      </div>
     </div>
   </div>
 </template>
