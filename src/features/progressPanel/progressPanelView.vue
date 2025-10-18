@@ -48,7 +48,8 @@
             <div
               v-for="achievement in achievements"
               :key="achievement.id"
-              class="flex flex-col items-center gap-1.5 w-20 text-center"
+              class="flex flex-col items-center gap-1.5 w-20 text-center cursor-pointer"
+              @click="openAchievementDialog(achievement)"
             >
               <div class="relative">
                 <Avatar :class="['h-16 w-16 border-2', achievement.is_completed ? 'border-green-500' : 'border-border']">
@@ -89,6 +90,15 @@
       <p>Данные о вашем прогрессе пока отсутствуют.</p>
     </div>
   </div>
+
+  <Dialog :open="isDialogOpen" @update:open="isDialogOpen = $event">
+    <DialogContent v-if="selectedAchievement" class="max-w-[90vw] rounded-lg">
+      <DialogHeader>
+        <DialogTitle>Детали достижения</DialogTitle>
+      </DialogHeader>
+      <AchievementDetailsDialog :achievement="selectedAchievement" />
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script setup>
@@ -98,11 +108,26 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import AchievementDetailsDialog from './components/AchievementDetailsDialog.vue';
 
 const competencies = ref([]);
 const achievements = ref([]);
 const loading = ref(true);
 const error = ref(null);
+
+const selectedAchievement = ref(null);
+const isDialogOpen = ref(false);
+
+const openAchievementDialog = (achievement) => {
+  selectedAchievement.value = achievement;
+  isDialogOpen.value = true;
+};
 
 const fetchData = async () => {
   loading.value = true;
