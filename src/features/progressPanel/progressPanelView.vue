@@ -29,12 +29,7 @@
       <Card v-for="competency in competencies" :key="competency.id">
         <CardContent class="p-4">
           <h3 class="font-semibold text-lg">{{ competency.name }}</h3>
-          <p v-if="competency.description" class="text-sm text-muted-foreground mt-1">{{ competency.description }}</p>
           <div class="mt-4 space-y-3">
-            <div class="flex items-baseline gap-2">
-              <span class="text-muted-foreground text-sm">Уровень: </span>
-              <span class="font-bold text-2xl">{{ competency.level }}</span>
-            </div>
             <div>
               <div class="flex justify-between items-center mb-1 text-sm">
                 <span class="text-muted-foreground">Прогресс</span>
