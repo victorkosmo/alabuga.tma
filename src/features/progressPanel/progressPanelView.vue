@@ -74,10 +74,9 @@
         <CardContent>
           <div class="space-y-4">
             <div v-for="competency in competencies" :key="competency.id">
-              <h3 class="font-semibold text-lg">{{ competency.name }}</h3>
               <div class="mt-2">
                 <div class="flex justify-between items-center mb-1 text-sm">
-                  <span class="text-muted-foreground">Прогресс</span>
+                  <p class="font-semibold text-[15px] pt-1">{{ competency.name }}</p>
                   <span class="font-medium">{{ competency.progress_points }} / 100</span>
                 </div>
                 <Progress :model-value="competency.progress_points" class="h-2" />

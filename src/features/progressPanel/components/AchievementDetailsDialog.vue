@@ -13,10 +13,10 @@
         </Avatar>
       </div>
       <span class="text-lg font-semibold">{{ achievement.name }}</span>
-      <div v-if="achievement.campaign_title" class="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-secondary px-3 py-1 text-xs">
+      <div v-if="achievement.campaign_title" class="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-xs">
         <span class="text-muted-foreground">Событие:</span>
         <div class="flex items-center gap-1.5">
-          <Avatar v-if="achievement.campaign_icon_url" class="h-4 w-4">
+          <Avatar v-if="achievement.campaign_icon_url" class="h-6 w-6">
             <AvatarImage :src="achievement.campaign_icon_url" :alt="achievement.campaign_title" />
             <AvatarFallback />
           </Avatar>
